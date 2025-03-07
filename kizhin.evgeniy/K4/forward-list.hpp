@@ -23,21 +23,14 @@ namespace kizhin {
   template < class T >
   FwdList< T >* reverseWithList(FwdList< T >* head)
   {
-    FwdList< T >* new_head = nullptr;
-    FwdList< T >* curr = head;
-    try {
-      while (curr != nullptr) {
-        FwdList< T >* next_node = curr->next;
-        FwdList< T >* new_node = new FwdList< T >{ curr->value, new_head };
-        new_head = new_node;
-        curr = next_node;
-      }
-    } catch (...) {
-      clear(new_head);
-      throw;
+    FwdList< T >* stack = nullptr;
+    while (head != nullptr) {
+      FwdList< T >* nextNode = head->next;
+      head->next = stack;
+      stack = head;
+      head = nextNode;
     }
-    clear(head);
-    return new_head;
+    return stack;
   }
 
   template < class T >
@@ -68,4 +61,3 @@ namespace kizhin {
 }
 
 #endif
-
