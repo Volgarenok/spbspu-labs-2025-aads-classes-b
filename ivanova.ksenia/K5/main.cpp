@@ -7,7 +7,19 @@ struct BiTree {
 };
 
 template< class T, class Cmp >
-BiTree< T > * find(const BiTree< T > * root, const T & value, Cmp cmp);
+BiTree< T > * find(const BiTree< T > * root, const T & value, Cmp cmp)
+{
+  if (root == nullptr) {
+    return nullptr;
+  }
+  if (cmp(value, root->data)) {
+    return find(root->left, value, cmp);
+  } else if (cmp(root->data, value)) {
+    return find(root->right, value, cmp);
+  } else {
+    return root;
+  }
+}
 
 int main()
 {
