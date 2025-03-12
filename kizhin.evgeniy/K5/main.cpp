@@ -19,9 +19,6 @@ int main()
     while (std::cin >> current) {
       std::cout << (find(sequence, current) ? "<FOUND>\n" : "<NOT FOUND>\n");
     }
-    if (!std::cin) {
-      throw std::logic_error("Failed to input values");
-    }
     clear(sequence);
   } catch (const std::exception& e) {
     std::cerr << e.what() << '\n';
