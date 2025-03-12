@@ -41,9 +41,9 @@ kizhin::BiTree< T >* kizhin::push(BiTree< T >* root, const T& value, Comp comp)
     return new BiTree< T >{ value, nullptr, nullptr };
   }
   if (comp(root->data, value)) {
-    root->left = push(root->right, value);
+    root->right = push(root->right, value);
   } else {
-    root->right = push(root->left, value);
+    root->left = push(root->left, value);
   }
   return root;
 }

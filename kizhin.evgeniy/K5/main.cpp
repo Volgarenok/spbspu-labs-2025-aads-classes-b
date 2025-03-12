@@ -5,12 +5,13 @@
 int main()
 {
   using namespace kizhin;
+  BiTree< int64_t >* sequence = nullptr;
   try {
     size_t size = 0;
     if (!(std::cin >> size)) {
       throw std::logic_error("Failed to input sequence size");
     }
-    BiTree< int64_t >* sequence = inputSequence< int64_t >(std::cin, size);
+    sequence = inputSequence< int64_t >(std::cin, size);
     if (!std::cin) {
       throw std::logic_error("Failed to input sequence");
     }
@@ -21,8 +22,10 @@ int main()
     if (!std::cin) {
       throw std::logic_error("Failed to input values");
     }
+    clear(sequence);
   } catch (const std::exception& e) {
     std::cerr << e.what() << '\n';
+    clear(sequence);
     return 1;
   }
 }
