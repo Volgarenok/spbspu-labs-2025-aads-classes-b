@@ -20,11 +20,13 @@ int main()
       throw std::logic_error("Failed to input values");
     }
     do {
-      std::cout << (find(sequence, current) ? "<FOUND>\n" : "<NOT FOUND>\n");
+      const BiTree< int64_t >* foundNode = find(sequence, current);
+      std::cout << (foundNode && foundNode->data == current ? "<FOUND>" : "<NOT FOUND>");
+      std::cout << '\n';
     } while (std::cin >> current);
     clear(sequence);
   } catch (const std::exception& e) {
-    std::cerr << e.what() << '\n';
+    std::cerr << "Error: " << e.what() << '\n';
     clear(sequence);
     return 1;
   }

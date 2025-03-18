@@ -29,3 +29,4 @@ kizhin::BiTree< T >* kizhin::inputSequence(std::istream& in, const std::size_t s
 }
 
 #endif
+
