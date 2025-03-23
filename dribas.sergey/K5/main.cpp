@@ -75,7 +75,6 @@ BiTree< int >* input(std::istream& in, size_t size, Cmp cmp)
     clear(root);
     throw std::invalid_argument("No INT type");
   }
-
   if (i != size) {
     clear(root);
     throw std::length_error("Number isnt enought");
@@ -110,7 +109,13 @@ int main()
   } catch (const std::exception& e) {
     std::cerr << e.what() << '\n';
   }
-  while(std::cin >> finding) {
+  while (!(std::cin.eof())) {
+    std::cin >> finding;
+    if (std::cin.fail()) {
+      clear(root);
+      std::cerr << "No int argument to finding" << '\n';
+      return 1;
+    }
     if (find(root, finding, cmp)) {
       std::cout << "<FOUND>\n";
     } else {
