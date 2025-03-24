@@ -1,4 +1,5 @@
-#include "iostream"
+#include <iostream>
+#include <string>
 
 template< class T, class Cmp >
 struct BiTree {
@@ -95,6 +96,12 @@ BiTreeIterator< T > BiTreeIterator::next() const
   }
 }
 
+template< class T >
+const T & BiTreeIterator::data() const
+{
+  return node->data;
+}
+
 template< class T, class Cmp >
 BiTree< T > * addElTree(BiTree< T > * root, const T & value, Cmp cmp)
 {
@@ -148,5 +155,90 @@ void clear(BiTree< T > * head)
 
 int main() 
 {
-
+  int n = 0;
+  std::cin >> n;
+  if (n <= 0)
+  {
+    std::cerr << "Not correct input!\n";
+    return 1;
+  }
+  BiTree< int > * root = nullptr;
+  int b = 0;
+  for (size_t i = 0; i < n; i++)
+  {
+    std::cin >> b;
+    if (std::cin.fail())
+    {
+      std::cerr << "Not correct input!\n";
+      clear(root);
+      return 1;
+    }
+    if (std::cin.eof())
+    {
+      std::cerr << "Not enough elements!\n";
+      clear(root);
+      return 1;
+    }
+    try
+    {
+      root = addElTree(root, b);
+    }
+    catch(const std::bad_alloc & e)
+    {
+      std::cerr << "Nor enough memory!\n";
+      clear(root);
+      return 1;
+    }
+  }
+  std::string com = "";
+  std::cin >> com;
+  BiTree< int > * help = root;
+  if (com == "tomax")
+  {
+    if (!root)
+    {
+      std::cin << "\n";
+      return 0;
+    }
+    while (help->left != nullptr)
+    {
+      help = help->left;
+    }
+    BiTreeIterator< int > * start{help};
+    while (start.hasNext())
+    {
+      std::cout << start.data() << " ";
+      start = start.next();
+    }
+    std::cout << start.data() << "\n";
+    clear(root);
+    return 0;
+  }
+  else if (com == "tomin")
+  {
+    if (!root)
+    {
+      std::cin << "\n";
+      return 0;
+    }
+    while (help->right != nullptr)
+    {
+      help = help->right;
+    }
+    BiTreeIterator< int > * start{help};
+    while (start.hasPrev())
+    {
+      std::cout << start.data() << " ";
+      start = start.prev();
+    }
+    std::cout << start.data() << "\n";
+    clear(root);
+    return 0;
+  }
+  else
+  {
+    std::cerr << "Not correct command!\n";
+    clear(root);
+    return 1;
+  }
 }
