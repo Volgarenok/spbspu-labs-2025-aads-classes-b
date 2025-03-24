@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-template< class T, class Cmp >
+template< class T, class Cmp = std::less< T >>
 struct BiTree {
   T data;
   Cmp cmp;
