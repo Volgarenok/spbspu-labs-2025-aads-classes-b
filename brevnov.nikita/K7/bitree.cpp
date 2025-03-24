@@ -3,7 +3,7 @@
 template< class T >
 bool brevnov::BiTreeIterator::hasPrev() const
 {
-  return node->
+  return prev() != nullptr;
 }
 
 template< class T >
@@ -13,11 +13,40 @@ bool brevnov::BiTreeIterator::hasNext() const
 }
 
 template< class T >
+brevnov::BiTreeIterator< T > brevnov::BiTreeIterator::prev() const
+{
+  if (node == nullptr)
+  {
+    return node;
+  }
+  if (node->left == nullptr)
+  {
+    BiTree< T > * prev = node;
+    node = node->parent;
+    while (node->right != prev && node != nullptr)
+    {
+      prev = node;
+      node = node->parent;
+    }
+    return node;
+  }
+  else
+  {
+    node = node->left;
+    while (node->right != nullptr)
+    {
+      node = node->right;
+    }
+    return node;
+  }
+}
+
+template< class T >
 brevnov::BiTreeIterator< T > brevnov::BiTreeIterator::next() const
 {
   if (node == nullptr)
   {
-    return nullptr;
+    return node;
   }
   if (node->right == nullptr)
   {
