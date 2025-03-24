@@ -153,7 +153,7 @@ void clear(BiTree< T > * head)
   delete head;
 }
 
-int main() 
+int main()
 {
   int n = 0;
   std::cin >> n;
