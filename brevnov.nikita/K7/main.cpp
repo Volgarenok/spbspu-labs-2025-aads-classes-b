@@ -197,7 +197,7 @@ int main()
   {
     if (!root)
     {
-      std::cin << "\n";
+      std::cout << "\n";
       return 0;
     }
     while (help->left != nullptr)
