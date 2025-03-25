@@ -60,12 +60,12 @@ BiTreeIterator< T > BiTreeIterator< T >::prev() const
   }
   else
   {
-    node = node->left;
-    while (node->right != nullptr)
+    help = help->left;
+    while (help->right != nullptr)
     {
-      node = node->right;
+      help = help->right;
     }
-    return node;
+    return help;
   }
 }
 
