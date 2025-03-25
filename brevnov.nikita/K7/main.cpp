@@ -46,16 +46,17 @@ BiTreeIterator< T > BiTreeIterator< T >::prev() const
   {
     return node;
   }
-  if (node->left == nullptr)
+  BiTree< T > * help = node;
+  if (help->left == nullptr)
   {
-    BiTree< T > * prev = node;
-    node = node->parent;
-    while (node->right != prev && node != nullptr)
+    BiTree< T > * prev = help;
+    help = help->parent;
+    while (help->right != prev && help != nullptr)
     {
-      prev = node;
-      node = node->parent;
+      prev = help;
+      help = help->parent;
     }
-    return node;
+    return help;
   }
   else
   {
@@ -75,25 +76,26 @@ BiTreeIterator< T > BiTreeIterator< T >::next() const
   {
     return node;
   }
-  if (node->right == nullptr)
+  BiTree< T > * help = node;
+  if (help->right == nullptr)
   {
-    BiTree< T > * prev = node;
-    node = node->parent;
-    while (node->left != prev && node != nullptr)
+    BiTree< T > * prev = help;
+    help = help->parent;
+    while (help->left != prev && help != nullptr)
     {
-      prev = node;
-      node = node->parent;
+      prev = help;
+      help = help->parent;
     }
-    return node;
+    return help;
   }
   else
   {
-    node = node->right;
-    while (node->left != nullptr)
+    help = help->right;
+    while (help->left != nullptr)
     {
-      node = node->left;
+      help = help->left;
     }
-    return node;
+    return help;
   }
 }
 
