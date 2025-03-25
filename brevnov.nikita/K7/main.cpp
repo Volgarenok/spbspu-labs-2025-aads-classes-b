@@ -10,6 +10,7 @@ struct BiTree {
 
 template< class T >
 struct BiTreeIterator {
+  BiTreeIterator(BiTree< T > * node_): node(node_) {}
   BiTree< T > * node;
 
   bool hasPrev() const;
@@ -204,13 +205,13 @@ int main()
     {
       help = help->left;
     }
-    BiTreeIterator< int > * start{help};
-    while (start.hasNext())
+    BiTreeIterator< int > * start(help);
+    while (start->hasNext())
     {
-      std::cout << start.data() << " ";
-      start = start.next();
+      std::cout << start->data() << " ";
+      start = start->next();
     }
-    std::cout << start.data() << "\n";
+    std::cout << start->data() << "\n";
     clear(root);
     return 0;
   }
@@ -226,12 +227,12 @@ int main()
       help = help->right;
     }
     BiTreeIterator< int > * start{help};
-    while (start.hasPrev())
+    while (start->hasPrev())
     {
-      std::cout << start.data() << " ";
-      start = start.prev();
+      std::cout << start->data() << " ";
+      start = start->prev();
     }
-    std::cout << start.data() << "\n";
+    std::cout << start->data() << "\n";
     clear(root);
     return 0;
   }
