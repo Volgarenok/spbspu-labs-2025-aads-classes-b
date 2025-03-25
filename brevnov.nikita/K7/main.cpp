@@ -109,7 +109,7 @@ BiTree< T > * addElTree(BiTree< T > * root, const T & value, Cmp cmp)
   BiTree< T > * sub = root;
   if (root == nullptr)
   {
-    return new BiTree< T >{value, nullptr, nullptr, nullptr};
+    return new BiTree< T >{value, cmp, nullptr, nullptr, nullptr};
   }
   bool done = false;
   while (!done)
@@ -118,7 +118,7 @@ BiTree< T > * addElTree(BiTree< T > * root, const T & value, Cmp cmp)
     {
       if (sub->right == nullptr)
       {
-        sub->right = new BiTree< T >{value, nullptr, nullptr, sub};
+        sub->right = new BiTree< T >{value, cmp, nullptr, nullptr, sub};
         done = true;
       }
       else
@@ -130,7 +130,7 @@ BiTree< T > * addElTree(BiTree< T > * root, const T & value, Cmp cmp)
     {
       if (sub->left == nullptr)
       {
-        sub->left = new BiTree< T >{value, nullptr, nullptr, sub};
+        sub->left = new BiTree< T >{value, cmp, nullptr, nullptr, sub};
         done = true;
       }
       else
