@@ -28,19 +28,19 @@ template< class T >
 void clear(BiTree< T > * head);
 
 template< class T >
-bool BiTreeIterator::hasPrev() const
+bool BiTreeIterator< T >::hasPrev() const
 {
   return prev() != nullptr;
 }
 
 template< class T >
-bool BiTreeIterator::hasNext() const
+bool BiTreeIterator< T >::hasNext() const
 {
   return next() != nullptr;
 }
 
 template< class T >
-BiTreeIterator< T > BiTreeIterator::prev() const
+BiTreeIterator< T > BiTreeIterator< T >::prev() const
 {
   if (node == nullptr)
   {
@@ -69,7 +69,7 @@ BiTreeIterator< T > BiTreeIterator::prev() const
 }
 
 template< class T >
-BiTreeIterator< T > BiTreeIterator::next() const
+BiTreeIterator< T > BiTreeIterator< T >::next() const
 {
   if (node == nullptr)
   {
