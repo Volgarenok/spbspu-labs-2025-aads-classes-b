@@ -30,13 +30,13 @@ void clear(BiTree< T > * head);
 template< class T >
 bool BiTreeIterator< T >::hasPrev() const
 {
-  return prev() != nullptr;
+  return prev().node != nullptr;
 }
 
 template< class T >
 bool BiTreeIterator< T >::hasNext() const
 {
-  return next() != nullptr;
+  return next().node != nullptr;
 }
 
 template< class T >
