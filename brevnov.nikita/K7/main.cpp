@@ -164,7 +164,7 @@ int main()
   }
   BiTree< int > * root = nullptr;
   int b = 0;
-  for (size_t i = 0; i < n; i++)
+  for (int i = 0; i < n; i++)
   {
     std::cin >> b;
     if (std::cin.fail())
@@ -218,7 +218,7 @@ int main()
   {
     if (!root)
     {
-      std::cin << "\n";
+      std::cout << "\n";
       return 0;
     }
     while (help->right != nullptr)
