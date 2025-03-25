@@ -205,7 +205,7 @@ int main()
     {
       help = help->left;
     }
-    BiTreeIterator< int > * start(help);
+    BiTreeIterator< int > start(help);
     while (start.hasNext())
     {
       std::cout << start.data() << " ";
