@@ -206,12 +206,12 @@ int main()
       help = help->left;
     }
     BiTreeIterator< int > * start(help);
-    while (start->hasNext())
+    while (start.hasNext())
     {
-      std::cout << start->data() << " ";
-      start = start->next();
+      std::cout << start.data() << " ";
+      start = start.next();
     }
-    std::cout << start->data() << "\n";
+    std::cout << start.data() << "\n";
     clear(root);
     return 0;
   }
@@ -226,13 +226,13 @@ int main()
     {
       help = help->right;
     }
-    BiTreeIterator< int > * start{help};
-    while (start->hasPrev())
+    BiTreeIterator< int > start(help);
+    while (start.hasPrev())
     {
-      std::cout << start->data() << " ";
-      start = start->prev();
+      std::cout << start.data() << " ";
+      start = start.prev();
     }
-    std::cout << start->data() << "\n";
+    std::cout << start.data() << "\n";
     clear(root);
     return 0;
   }
