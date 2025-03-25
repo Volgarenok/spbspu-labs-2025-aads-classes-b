@@ -98,7 +98,7 @@ BiTreeIterator< T > BiTreeIterator< T >::next() const
 }
 
 template< class T >
-const T & BiTreeIterator::data() const
+const T & BiTreeIterator< T >::data() const
 {
   return node->data;
 }
