@@ -1,13 +1,11 @@
 #include <iostream>
 #include <string>
-#include <sstream>
-
 
 template< class T, class Cmp >
 struct BiTree
 {
-  T data_;
-  Cmp cmp_;
+  T data;
+  Cmp cmp;
   BiTree< T, Cmp >* left;
   BiTree< T, Cmp >* right;
   BiTree< T, Cmp >* parent;
@@ -18,34 +16,29 @@ using BiTreeInt = BiTree< int, std::less< int > >;
 template< class T, class Cmp >
 struct BiTreeIterator
 {
-
-public:
-  hasPrev() const;
-  hasNext() const;
-  BiTreeIterator next() const;
-  BiTreeIterator prev() const;
-  
-
-private:
   BiTree< T, Cmp >* node;
 
+  bool hasPrev() const;
+  bool hasNext() const;
+  BiTreeIterator< T, Cmp > next() const;
+  BiTreeIterator< T, Cmp > prev() const;
+  const T& data() const;
 };
 
-
 template< class T, class Cmp >
-bool BiTreeIterator::hasPrev() const
+bool BiTreeIterator< T, Cmp >::hasPrev() const
 {
   return node && (node->left || node->parent);
 }
 
 template< class T, class Cmp >
-bool BiTreeIterator::hasNext() const
+bool BiTreeIterator< T, Cmp >::hasNext() const
 {
   return node && (node->right || node->parent);
 }
 
 template< class T, class Cmp >
-BiTreeIterator::BiTreeIterator< T, Cmp > next() const
+BiTreeIterator< T, Cmp > BiTreeIterator< T, Cmp >::next() const
 {
   BiTree< T, Cmp >* n = node;
   if (n->right)
@@ -55,17 +48,14 @@ BiTreeIterator::BiTreeIterator< T, Cmp > next() const
   }
   else
   {
-    while (n->parent && n == n->parent->right)
-    {
-      n = n->parent;
-    }
+    while (n->parent && n == n->parent->right) n = n->parent;
     n = n->parent;
   }
   return { n };
 }
 
 template< class T, class Cmp >
-BiTreeIterator::BiTreeIterator< T, Cmp > prev() const
+BiTreeIterator< T, Cmp > BiTreeIterator< T, Cmp >::prev() const
 {
   BiTree< T, Cmp >* n = node;
   if (n->left)
@@ -75,35 +65,33 @@ BiTreeIterator::BiTreeIterator< T, Cmp > prev() const
   }
   else
   {
-    while (n->parent && n == n->parent->left)
-    {
-      n = n->parent;
-    }
+    while (n->parent && n == n->parent->left) n = n->parent;
     n = n->parent;
   }
   return { n };
 }
 
 template< class T, class Cmp >
-const T& BiTreeIterator::data_() const
+const T& BiTreeIterator< T, Cmp >::data() const
 {
-  return node->data_;
+  return node->data;
 }
-
 
 BiTreeInt* insert(BiTreeInt* root, int value)
 {
-  if (!root) return new BiTreeInt{ value, std::les3s< int >(), nullptr, nullptr, nullptr };
+  if (!root)
+    return new BiTreeInt{ value, std::less< int >(), nullptr, nullptr, nullptr };
   BiTreeInt* parent = nullptr;
   BiTreeInt* current = root;
   while (current)
   {
     parent = current;
-    if (value < current->data_) current = current->left;
+    if (value < current->data) current = current->left;
     else current = current->right;
   }
+
   auto* newNode = new BiTreeInt{ value, std::less< int >(), nullptr, nullptr, parent };
-  if (value < parent->data_) parent->left = newNode;
+  if (value < parent->data) parent->left = newNode;
   else parent->right = newNode;
   return root;
 }
@@ -120,6 +108,14 @@ BiTreeInt* findMax(BiTreeInt* node)
   return node;
 }
 
+void deleteTree(BiTreeInt* node)
+{
+  if (!node) return;
+  deleteTree(node->left);
+  deleteTree(node->right);
+  delete node;
+}
+
 int main()
 {
   int n;
@@ -128,6 +124,7 @@ int main()
     std::cerr << "Error\n";
     return 1;
   }
+
   BiTreeInt* root = nullptr;
   for (int i = 0; i < n; ++i)
   {
@@ -135,6 +132,7 @@ int main()
     if (!(std::cin >> value))
     {
       std::cerr << "Error\n";
+      deleteTree(root);
       return 1;
     }
     root = insert(root, value);
@@ -144,6 +142,7 @@ int main()
   if (!(std::cin >> command))
   {
     std::cerr << "Error\n";
+    deleteTree(root);
     return 1;
   }
 
@@ -151,23 +150,25 @@ int main()
   {
     for (BiTreeIterator< int, std::less< int > > it{ findMin(root) }; it.node; it = it.next())
     {
-      std::cout << it.data_() << ' ';
+      std::cout << it.data() << ' ';
     }
   }
   else if (command == "tomin")
   {
     for (BiTreeIterator< int, std::less< int > > it{ findMax(root) }; it.node; it = it.prev())
     {
-      std::cout << it.data_() << ' ';
+      std::cout << it.data() << ' ';
     }
   }
   else
   {
     std::cerr << "Error\n";
+    deleteTree(root);
     return 1;
   }
 
   std::cout << "\n";
+  deleteTree(root);
   return 0;
 }
 
