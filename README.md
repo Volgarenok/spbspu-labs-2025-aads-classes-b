@@ -30,17 +30,17 @@ template< class T, class Cmp >
 struct BiTree {
   T data;
   Cmp cmp;
-  BiTree< T > * left, * right, * parent;
+  BiTree< T, Cmp > * left, * right, * parent;
 };
 
-template< class T >
+template< class T, class Cmp >
 struct BiTreeIterator {
-  BiTree< T > * node;
+  BiTree< T, Cmp > * node;
 
   bool hasPrev() const;
   bool hasNext() const;
-  BiTreeIterator< T > next() const;
-  BiTreeIterator< T > prev() const;
+  BiTreeIterator< T, Cmp > next() const;
+  BiTreeIterator< T, Cmp > prev() const;
 
   const T & data() const;
 };
