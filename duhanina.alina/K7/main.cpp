@@ -179,10 +179,6 @@ int main()
     BiTree< int, std::less< int > >* root = nullptr;
     size_t length = 0;
     std::cin >> length;
-    if (length == 0)
-    {
-      return 0;
-    }
     for (size_t i = 0; i < length; ++i)
     {
       int value;
@@ -198,6 +194,10 @@ int main()
     {
       free_tree(root);
       throw std::runtime_error("No command");
+    }
+    if (length == 0)
+    {
+      return 0;
     }
     if (command == "tomax")
     {
