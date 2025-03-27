@@ -163,11 +163,15 @@ int main()
   }
   else if (command == "tomin")
   {
-    BiTreeIterator< int, std::less< int > > it{ findMax(root) };
-    std::cout << it.data();
-    for (it = it.prev(); it.node; it = it.prev())
+    BiTreeInt* maxNode = findMax(root);
+    if (maxNode)
     {
-      std::cout << ' ' << it.data();
+      BiTreeIterator< int, std::less< int > > it{ maxNode };
+      std::cout << it.data();
+      for (it = it.prev(); it.node; it = it.prev())
+      {
+        std::cout << ' ' << it.data();
+      }
     }
   }
   else
