@@ -98,12 +98,14 @@ BiTreeInt* insert(BiTreeInt* root, int value)
 
 BiTreeInt* findMin(BiTreeInt* node)
 {
+  if (!node) return nullptr;
   while (node->left) node = node->left;
   return node;
 }
 
 BiTreeInt* findMax(BiTreeInt* node)
 {
+  if (!node) return nullptr;
   while (node->right) node = node->right;
   return node;
 }
@@ -148,16 +150,24 @@ int main()
 
   if (command == "tomax")
   {
-    for (BiTreeIterator< int, std::less< int > > it{ findMin(root) }; it.node; it = it.next())
+    BiTreeInt* minNode = findMin(root);
+    if (minNode)
     {
-      std::cout << it.data() << ' ';
+      BiTreeIterator< int, std::less< int > > it{ minNode };
+      std::cout << it.data();
+      for (it = it.next(); it.node; it = it.next())
+      {
+        std::cout << ' ' << it.data();
+      }
     }
   }
   else if (command == "tomin")
   {
-    for (BiTreeIterator< int, std::less< int > > it{ findMax(root) }; it.node; it = it.prev())
+    BiTreeIterator< int, std::less< int > > it{ findMax(root) };
+    std::cout << it.data();
+    for (it = it.prev(); it.node; it = it.prev())
     {
-      std::cout << it.data() << ' ';
+      std::cout << ' ' << it.data();
     }
   }
   else
@@ -166,7 +176,6 @@ int main()
     deleteTree(root);
     return 1;
   }
-
   std::cout << "\n";
   deleteTree(root);
   return 0;
