@@ -55,9 +55,17 @@ bool BiTreeIterator< T, Cmp >::hasNext() const
   {
     return false;
   }
-  if (node->right || node->parent)
+  if (node->right)
   {
     return true;
+  }
+  BiTree< T, Cmp >* current = node;
+  while (current->parent)
+  {
+    if (current->parent->left == current)
+    {
+      return true;
+    }
   }
   return false;
 }
@@ -171,6 +179,10 @@ int main()
     BiTree< int, std::less< int > >* root = nullptr;
     size_t length = 0;
     std::cin >> length;
+    if (length == 0)
+    {
+      return 0;
+    }
     for (size_t i = 0; i < length; ++i)
     {
       int value;
