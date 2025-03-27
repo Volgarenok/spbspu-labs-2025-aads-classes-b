@@ -181,7 +181,7 @@ int main()
     std::cin >> length;
     for (size_t i = 0; i < length; ++i)
     {
-      int value;
+      int value = 0;
       if (!(std::cin >> value))
       {
         free_tree(root);
@@ -197,6 +197,7 @@ int main()
     }
     if (length == 0)
     {
+      std::cout << "\n";
       return 0;
     }
     if (command == "tomax")
