@@ -18,111 +18,101 @@ struct BiTreeIterator
 {
   BiTree< T, Cmp >* node;
 
-  bool hasPrev() const
-  {
-    if (!node)
-    {
-      return false;
-    }
-    if (node->left)
-    {
-      return true;
-    }
-    BiTree< T, Cmp >* current = node;
-    while (current->parent)
-    {
-      if (current->parent->right == current)
-      {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  bool hasNext() const
-  {
-    if (!node)
-    {
-      return false;
-    }
-    if (node->right)
-    {
-      return true;
-    }
-    BiTree< T, Cmp >* current = node;
-    while (current->parent)
-    {
-      if (current->parent->left == current)
-      {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  BiTreeIterator< T, Cmp > next() const
-  {
-    if (!node)
-    {
-      throw std::runtime_error("No next node");
-    }
-    if (node->right)
-    {
-      BiTree< T, Cmp >* current = node->right;
-      while (current->left)
-      {
-        current = current->left;
-      }
-      return BiTreeIterator< T, Cmp >{ current };
-    }
-    BiTree< T, Cmp >* current = node;
-    while (current->parent)
-    {
-      if (current->parent->left == current)
-      {
-        return BiTreeIterator< T, Cmp >{ current->parent };
-      }
-      current = current->parent;
-    }
-    throw std::runtime_error("No next node");
-  }
-
-  BiTreeIterator< T, Cmp > prev() const
-  {
-    if (!node)
-    {
-      throw std::runtime_error("No prev node");
-    }
-    if (node->left)
-    {
-      BiTree< T, Cmp >* current = node->left;
-      while (current->right)
-      {
-        current = current->right;
-      }
-      return BiTreeIterator< T, Cmp >{ current };
-    }
-    BiTree< T, Cmp >* current = node;
-    while (current->parent)
-    {
-      if (current->parent->right == current)
-      {
-        return BiTreeIterator< T, Cmp >{ current->parent };
-      }
-      current = current->parent;
-    }
-    throw std::runtime_error("No prev node");
-  }
-
-  const T& data() const
-  {
-    if (!node)
-    {
-      throw std::runtime_error("No data");
-    }
-    return node->data;
-  }
+  bool hasPrev() const;
+  bool hasNext() const;
+  BiTreeIterator< T, Cmp > next() const;
+  BiTreeIterator< T, Cmp > prev() const;
+  const T& data() const;
 };
+
+template< class T, class Cmp >
+bool BiTreeIterator< T, Cmp >::hasPrev() const
+{
+  if (!node)
+  {
+    return false;
+  }
+  if (node->left)
+  {
+    return true;
+  }
+  BiTree< T, Cmp >* current = node;
+  while (current->parent)
+  {
+    if (current->parent->right == current)
+    {
+      return true;
+    }
+    current = current->parent;
+  }
+  return false;
+}
+
+template< class T, class Cmp >
+bool BiTreeIterator< T, Cmp >::hasNext() const
+{
+  if (!node)
+  {
+    return false;
+  }
+  if (node->right || node->parent)
+  {
+    return true;
+  }
+  return false;
+}
+
+template< class T, class Cmp >
+BiTreeIterator< T, Cmp > BiTreeIterator< T, Cmp >::next() const
+{
+  BiTree< T, Cmp >* current = node;
+  if (current->right)
+  {
+    current = current->right;
+    while (current->left)
+    {
+      current = current->left;
+    }
+  }
+  else
+  {
+    while (current->parent && current == current->parent->right)
+    {
+      current = current->parent;
+    }
+    current = current->parent;
+  }
+  return { current };
+}
+
+template< class T, class Cmp >
+BiTreeIterator< T, Cmp > BiTreeIterator< T, Cmp >::prev() const
+{
+  BiTree< T, Cmp >* current = node;
+  if (current->left)
+  {
+    current = current->left;
+    while (current->right)
+    {
+      current = current->right;
+    }
+  }
+  else
+  {
+    while (current->parent && current == current->parent->left)
+    {
+      current = current->parent;
+    }
+    current = current->parent;
+  }
+  return { current };
+}
+
+template< class T, class Cmp >
+const T& BiTreeIterator< T, Cmp >::data() const
+{
+  return node->data;
+}
 
 template< class T, class Cmp >
 BiTree< T, Cmp >* insert(BiTree< T, Cmp >* node, const T& value, BiTree< T, Cmp >* parent = nullptr)
@@ -199,31 +189,31 @@ int main()
     }
     if (command == "tomax")
     {
-      BiTreeIterator< int, std::less< int > > it{ find_min(root) };
-      if (it.node)
+      BiTree< int, std::less< int > >* minRoot = find_min(root);
+      if (minRoot)
       {
+        BiTreeIterator< int, std::less< int > > it{ minRoot };
         std::cout << it.data();
-        while (it.hasNext())
+        for (it = it.next(); it.node; it = it.next())
         {
-          it = it.next();
           std::cout << " " << it.data();
         }
+        std::cout << "\n";
       }
-      std::cout << "\n";
     }
     else if (command == "tomin")
     {
-      BiTreeIterator< int, std::less< int > > it{ find_max(root) };
-      if (it.node)
+      BiTree< int, std::less< int > >* maxRoot = find_max(root);
+      if (maxRoot)
       {
+        BiTreeIterator< int, std::less< int > > it{ maxRoot };
         std::cout << it.data();
-        while (it.hasPrev())
+        for (it = it.prev(); it.node; it = it.prev())
         {
-          it = it.prev();
           std::cout << " " << it.data();
         }
+        std::cout << "\n";
       }
-      std::cout << "\n";
     }
     else
     {
