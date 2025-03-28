@@ -100,7 +100,6 @@ void clear(FwdList* head)
     delete head;
     head = new_head;
   }
-
 }
 
 void outList(FwdList* head) {
