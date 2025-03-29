@@ -44,11 +44,17 @@ BiTreeIterator< T, Cmp > BiTreeIterator< T, Cmp >::next() const
   if (n->right)
   {
     n = n->right;
-    while (n->left) n = n->left;
+    while (n->left)
+    {
+      n = n->left;
+    }
   }
   else
   {
-    while (n->parent && n == n->parent->right) n = n->parent;
+    while (n->parent && n == n->parent->right)
+    {
+      n = n->parent;
+    }
     n = n->parent;
   }
   return { n };
@@ -61,11 +67,17 @@ BiTreeIterator< T, Cmp > BiTreeIterator< T, Cmp >::prev() const
   if (n->left)
   {
     n = n->left;
-    while (n->right) n = n->right;
+    while (n->right)
+    {
+      n = n->right;
+    }
   }
   else
   {
-    while (n->parent && n == n->parent->left) n = n->parent;
+    while (n->parent && n == n->parent->left)
+    {
+      n = n->parent;
+    }
     n = n->parent;
   }
   return { n };
@@ -80,39 +92,68 @@ const T& BiTreeIterator< T, Cmp >::data() const
 BiTreeInt* insert(BiTreeInt* root, int value)
 {
   if (!root)
+  {
     return new BiTreeInt{ value, std::less< int >(), nullptr, nullptr, nullptr };
+  }
   BiTreeInt* parent = nullptr;
   BiTreeInt* current = root;
   while (current)
   {
     parent = current;
-    if (value < current->data) current = current->left;
-    else current = current->right;
+    if (value < current->data)
+    {
+      current = current->left;
+    }
+    else
+    {
+      current = current->right;
+    }
   }
 
   auto* newNode = new BiTreeInt{ value, std::less< int >(), nullptr, nullptr, parent };
-  if (value < parent->data) parent->left = newNode;
-  else parent->right = newNode;
+  if (value < parent->data)
+  {
+    parent->left = newNode;
+  }
+  else
+  {
+    parent->right = newNode;
+  }
   return root;
 }
 
 BiTreeInt* findMin(BiTreeInt* node)
 {
-  if (!node) return nullptr;
-  while (node->left) node = node->left;
+  if (!node)
+  {
+    return nullptr;
+  }
+  while (node->left)
+  {
+    node = node->left;
+  }
   return node;
 }
 
 BiTreeInt* findMax(BiTreeInt* node)
 {
-  if (!node) return nullptr;
-  while (node->right) node = node->right;
+  if (!node)
+  {
+    return nullptr;
+  }
+  while (node->right)
+  {
+    node = node->right;
+  }
   return node;
 }
 
 void deleteTree(BiTreeInt* node)
 {
-  if (!node) return;
+  if (!node)
+  {
+    return;
+  }
   deleteTree(node->left);
   deleteTree(node->right);
   delete node;
