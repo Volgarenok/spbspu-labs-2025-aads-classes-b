@@ -20,19 +20,20 @@ int main()
     if (!(std::cin >> command) || (command != "tomax" && command != "tomin")) {
       throw std::logic_error("Failed to input command");
     }
-    if (command == "tomax") {
+    if (command == "tomax" && size != 0) {
       auto it = begin(sequence);
       for (; it.hasNext(); it = it.next()) {
         std::cout << it.data() << ' ';
       }
-      std::cout << it.data() << '\n';
-    } else {
+      std::cout << it.data();
+    } else if (size != 0) {
       auto it = rbegin(sequence);
       for (; it.hasPrev(); it = it.prev()) {
         std::cout << it.data() << ' ';
       }
-      std::cout << it.data() << '\n';
+      std::cout << it.data();
     }
+    std::cout << '\n';
     clear(sequence);
   } catch (const std::exception& e) {
     std::cerr << "Error: " << e.what() << '\n';
