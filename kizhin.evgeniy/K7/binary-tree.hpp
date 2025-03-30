@@ -8,9 +8,9 @@ namespace kizhin {
   struct BiTree
   {
     T data;
-    BiTree< T >* left;
-    BiTree< T >* right;
-    BiTree< T >* parent;
+    BiTree* left;
+    BiTree* right;
+    BiTree* parent;
     Cmp cmp;
   };
 
@@ -42,7 +42,8 @@ template < typename T, typename Cmp >
 kizhin::BiTree< T, Cmp >* kizhin::push(BiTree< T, Cmp >* root, const T& value)
 {
   if (root == nullptr) {
-    return new BiTree< T, Cmp >{ value, nullptr, nullptr, nullptr, root->cmp };
+    return new BiTree< T, Cmp >{ value, nullptr, nullptr, nullptr,
+      root->cmp };
   }
   BiTree< T, Cmp >* parent = find(root, value);
   if (root->cmp(parent->data, value)) {

@@ -5,7 +5,7 @@
 #include "binary-tree.hpp"
 
 namespace kizhin {
-  template < typename T, typename Cmp >
+  template < typename T, typename Cmp = std::less< T > >
   BiTree< T, Cmp >* inputSequence(std::istream&, std::size_t);
 }
 

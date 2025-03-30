@@ -1,5 +1,6 @@
 #include <cstdint>
 #include <stdexcept>
+#include "binary-tree-iterator.hpp"
 #include "io-utils.hpp"
 
 int main()
@@ -11,7 +12,7 @@ int main()
     if (!(std::cin >> size)) {
       throw std::logic_error("Failed to input sequence size");
     }
-    sequence = inputSequence< int64_t, decltype(sequence->cmp) >(std::cin, size);
+    sequence = inputSequence< int64_t >(std::cin, size);
     if (!std::cin) {
       throw std::logic_error("Failed to input sequence");
     }
@@ -19,7 +20,19 @@ int main()
     if (!(std::cin >> command) || (command != "tomax" && command != "tomin")) {
       throw std::logic_error("Failed to input command");
     }
-    /* TODO walk */
+    if (command == "tomax") {
+      auto it = begin(sequence);
+      for (; it.hasNext(); it = it.next()) {
+        std::cout << it.data() << ' ';
+      }
+      std::cout << it.data() << '\n';
+    } else {
+      auto it = rbegin(sequence);
+      for (; it.hasPrev(); it = it.prev()) {
+        std::cout << it.data() << ' ';
+      }
+      std::cout << it.data() << '\n';
+    }
     clear(sequence);
   } catch (const std::exception& e) {
     std::cerr << "Error: " << e.what() << '\n';
