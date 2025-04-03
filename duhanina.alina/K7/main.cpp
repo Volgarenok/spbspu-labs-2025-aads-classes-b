@@ -142,23 +142,25 @@ BiTree< T, Cmp >* insert(BiTree< T, Cmp >* node, const T& value, BiTree< T, Cmp 
 }
 
 template< class T, class Cmp >
-BiTree< T, Cmp >* find_min(BiTree< T, Cmp >* node)
+BiTreeIterator< T, Cmp > begin(BiTree< T, Cmp >* root)
 {
-  while (node && node->left)
+  BiTreeIterator< T, Cmp > it{ root };
+  while (it.hasPrev())
   {
-    node = node->left;
+    it = it.prev();
   }
-  return node;
+  return it;
 }
 
 template< class T, class Cmp >
-BiTree< T, Cmp >* find_max(BiTree< T, Cmp >* node)
+BiTreeIterator< T, Cmp > rbegin(BiTree< T, Cmp >* root)
 {
-  while (node && node->right)
+  BiTreeIterator< T, Cmp > it{ root };
+  while (it.hasNext())
   {
-    node = node->right;
+    it = it.next();
   }
-  return node;
+  return it;
 }
 
 template< class T, class Cmp >
@@ -202,31 +204,23 @@ int main()
     }
     if (command == "tomax")
     {
-      BiTree< int, std::less< int > >* minRoot = find_min(root);
-      if (minRoot)
+      BiTreeIterator< int, std::less< int > > it = begin(root);
+      std::cout << it.data();
+      for (it = it.next(); it.node; it = it.next())
       {
-        BiTreeIterator< int, std::less< int > > it{ minRoot };
-        std::cout << it.data();
-        for (it = it.next(); it.node; it = it.next())
-        {
-          std::cout << " " << it.data();
-        }
-        std::cout << "\n";
+        std::cout << " " << it.data();
       }
+      std::cout << "\n";
     }
     else if (command == "tomin")
     {
-      BiTree< int, std::less< int > >* maxRoot = find_max(root);
-      if (maxRoot)
+      BiTreeIterator< int, std::less< int > > it = rbegin(root);
+      std::cout << it.data();
+      for (it = it.prev(); it.node; it = it.prev())
       {
-        BiTreeIterator< int, std::less< int > > it{ maxRoot };
-        std::cout << it.data();
-        for (it = it.prev(); it.node; it = it.prev())
-        {
-          std::cout << " " << it.data();
-        }
-        std::cout << "\n";
+        std::cout << " " << it.data();
       }
+      std::cout << "\n";
     }
     else
     {
