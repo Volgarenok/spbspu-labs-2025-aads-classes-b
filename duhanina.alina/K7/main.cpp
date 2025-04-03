@@ -66,6 +66,7 @@ bool BiTreeIterator< T, Cmp >::hasNext() const
     {
       return true;
     }
+    current = current->parent;
   }
   return false;
 }
