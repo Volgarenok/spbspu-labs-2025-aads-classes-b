@@ -149,6 +149,11 @@ void clear(BiTree< T, Cmp >* root)
 template< class T, class Cmp >
 void printTomax(BiTree< T, Cmp >* root, std::ostream& out)
 {
+  if (root == nullptr)
+  {
+    return;
+  }
+
   BiTreeIterator< T, Cmp > minIt{root};
   while (minIt.hasPrev())
   {
@@ -165,6 +170,11 @@ void printTomax(BiTree< T, Cmp >* root, std::ostream& out)
 template< class T, class Cmp >
 void printTomin(BiTree< T, Cmp >* root, std::ostream& out)
 {
+  if (root == nullptr)
+  {
+    return;
+  }
+
   BiTreeIterator< T, Cmp > maxIt{root};
   while (maxIt.hasNext())
   {
@@ -202,12 +212,12 @@ int main()
     return 1;
   }
 
-  if (comand == "tomax" && n != 0)
+  if (comand == "tomax")
   {
     printTomax(root, std::cout);
     std::cout << "\n";
   }
-  else if (comand == "tomin" n != 0)
+  else if (comand == "tomin")
   {
     printTomin(root, std::cout);
     std::cout << "\n";
