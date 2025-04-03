@@ -158,7 +158,7 @@ void printTomax(BiTree< T, Cmp >* root, std::ostream& out)
   while (minIt.hasNext())
   {
     minIt = minIt.next();
-    out << "\n" << minIt.data();
+    out << " " << minIt.data();
   }
 }
 
@@ -174,7 +174,7 @@ void printTomin(BiTree< T, Cmp >* root, std::ostream& out)
   while (maxIt.hasPrev())
   {
     maxIt = maxIt.prev();
-    out << "\n" << maxIt.data();
+    out << " " << maxIt.data();
   }
 }
 
@@ -202,12 +202,12 @@ int main()
     return 1;
   }
 
-  if (comand == "tomax")
+  if (comand == "tomax" && n != 0)
   {
     printTomax(root, std::cout);
     std::cout << "\n";
   }
-  else if (comand == "tomin")
+  else if (comand == "tomin" n != 0)
   {
     printTomin(root, std::cout);
     std::cout << "\n";
