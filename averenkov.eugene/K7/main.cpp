@@ -28,59 +28,73 @@ struct BiTreeIterator
 template< class T, class Cmp >
 bool BiTreeIterator< T, Cmp >::hasPrev() const
 {
-  return node && (node->left || node->parent);
+  if (!node)
+  {
+    return false;
+  }
+  return node->left || (node->parent && node != findMin(node->parent));
 }
 
 template< class T, class Cmp >
 bool BiTreeIterator< T, Cmp >::hasNext() const
 {
-  return node && (node->right || node->parent);
+  if (!node)
+  {
+    return false;
+  }
+  return node->right || (node->parent && node != findMax(node->parent));
 }
 
 template< class T, class Cmp >
 BiTreeIterator< T, Cmp > BiTreeIterator< T, Cmp >::next() const
 {
-  BiTree< T, Cmp >* n = node;
-  if (n->right)
+  if (!node)
   {
-    n = n->right;
+    return { nullptr };
+  }
+  if (node->right)
+  {
+    BiTree< T, Cmp >* n = node->right;
     while (n->left)
     {
       n = n->left;
     }
+    return { n };
   }
-  else
+  BiTree< T, Cmp >* current = node;
+  BiTree< T, Cmp >* p = node->parent;
+  while (p && current == p->right)
   {
-    while (n->parent && n == n->parent->right)
-    {
-      n = n->parent;
-    }
-    n = n->parent;
+    current = p;
+    p = p->parent;
   }
-  return { n };
+  return { p };
 }
 
 template< class T, class Cmp >
 BiTreeIterator< T, Cmp > BiTreeIterator< T, Cmp >::prev() const
 {
-  BiTree< T, Cmp >* n = node;
-  if (n->left)
+  if (!node)
   {
-    n = n->left;
+    return { nullptr };
+  }
+  if (node->left)
+  {
+    BiTree< T, Cmp >* n = node->left;
     while (n->right)
     {
       n = n->right;
     }
+    return { n };
   }
-  else
+  BiTree< T, Cmp >* current = node;
+  BiTree< T, Cmp >* p = node->parent;
+  while (p && current == p->left)
   {
-    while (n->parent && n == n->parent->left)
-    {
-      n = n->parent;
-    }
-    n = n->parent;
+    current = p;
+    p = p->parent;
   }
-  return { n };
+  return { p };
 }
 
 template< class T, class Cmp >
