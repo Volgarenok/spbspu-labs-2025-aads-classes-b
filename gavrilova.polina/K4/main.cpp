@@ -102,7 +102,7 @@ FwdList< int >* inputListInt(std::istream& in)
       throw;
     }
   }
-  return head;
+ return head;
 }
 
 std::ostream& outputListInt(std::ostream& out, FwdList< int >* head)
@@ -160,3 +160,4 @@ int main (int argc, char** argv)
   std::cout << "\n";
   clear< int >(new_head);
 }
+
