@@ -259,7 +259,7 @@ int main()
   std::cin >> way;
   if (way == "tomax")
   {
-    if (size >= 0)
+    if (size > 0)
     {
       auto it = begin(root);
       for (; it.hasNext(); it = it.next())
@@ -271,7 +271,7 @@ int main()
   }
   else if (way == "tomin")
   {
-    if (size >= 0)
+    if (size > 0)
     {
       auto it = rbegin(root);
       for (; it.hasPrev(); it = it.prev())
