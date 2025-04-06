@@ -23,6 +23,10 @@ struct BiTreeIterator
 template< class T >
 bool BiTreeIterator< T >::hasPrev() const
 {
+  if (node == nullptr)
+  {
+    return false;
+  }
   if (node->left)
   {
     return true;
@@ -43,6 +47,10 @@ bool BiTreeIterator< T >::hasPrev() const
 template< class T >
 bool BiTreeIterator< T >::hasNext() const
 {
+  if (node == nullptr)
+  {
+    return false;
+  }
   if (node->right)
   {
     return true;
