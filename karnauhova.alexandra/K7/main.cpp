@@ -36,7 +36,7 @@ bool BiTreeIterator< T >::hasPrev() const
       return true;
     }
     last = last->parent;
-  } 
+  }
   return false;
 }
 
@@ -56,7 +56,7 @@ bool BiTreeIterator< T >::hasNext() const
       return true;
     }
     last = last->parent;
-  } 
+  }
   return false;
 }
 
