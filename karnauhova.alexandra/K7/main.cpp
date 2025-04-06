@@ -1,6 +1,6 @@
 #include <iostream>
 
-template< class T, class Cmp = std::less< T > >
+template< class T >
 struct BiTree
 {
   T data;
@@ -27,7 +27,7 @@ bool BiTreeIterator< T >::hasPrev() const
   {
     return true;
   }
-  BiTree< T >* last = root;
+  BiTree< T >* last = node;
   while(last->parent)
   {
     BiTree< T >* parent = last->parent;
@@ -47,7 +47,7 @@ bool BiTreeIterator< T >::hasNext() const
   {
     return true;
   }
-  BiTree< T >* last = root;
+  BiTree< T >* last = node;
   while(last->parent)
   {
     BiTree< T >* parent = last->parent;
@@ -69,12 +69,17 @@ BiTreeIterator< T > BiTreeIterator< T >::next() const
   }
   if (node->right)
   {
-    BiTreeIterator< T > it{node->right};
+    BiTree< T >* current = node->right;
+    while (current->left)
+    {
+      current = current->left;
+    }
+    BiTreeIterator< T > it{current};
     return it;
   }
   BiTree< T >* parent = node->parent;
   BiTree< T >* last = node;
-  while (parent->left != last)
+  while (parent->left != last && parent->parent)
   {
     last = last->parent;
     parent = parent->parent;
@@ -92,12 +97,17 @@ BiTreeIterator< T > BiTreeIterator< T >::prev() const
   }
   if (node->left)
   {
-    BiTreeIterator< T > it{node->left};
+    BiTree< T >* current = node->left;
+    while (current->right)
+    {
+      current = current->right;
+    }
+    BiTreeIterator< T > it{current};
     return it;
   }
   BiTree< T >* parent = node->parent;
   BiTree< T >* last = node;
-  while (parent->right != last)
+  while (parent->right != last && parent->parent)
   {
     last = last->parent;
     parent = parent->parent;
@@ -116,7 +126,7 @@ template< class T >
 BiTreeIterator< T > begin(BiTree< T > * root)
 {
   BiTree< T >* min = root;
-  while (!min->left)
+  while (min->left)
   {
     min = min->left;
   }
@@ -124,11 +134,11 @@ BiTreeIterator< T > begin(BiTree< T > * root)
   return begin;
 }
 
-template< class T, class Cmp >
+template< class T >
 BiTreeIterator< T > rbegin(BiTree< T > * root)
 {
   BiTree< T >* max = root;
-  while (!max->right)
+  while (max->right)
   {
     max = max->right;
   }
@@ -144,27 +154,21 @@ void add_root(T x, BiTree< T >* root, Cmp cmp)
   {
     if (cmp(x, now->data))
     {
-      if (now->right == nullptr)
+      if (now->left == nullptr)
       {
-        now->right = new BiTree<T>{x, nullptr, nullptr, nullptr};
+        now->left = new BiTree< T >{x, nullptr, nullptr, now};
         return;
       }
-      else
-      {
-        now = now->right;
-      }
+        now = now->left;
     }
     else
     {
-      if (now->left == nullptr)
+      if (now->right == nullptr)
       {
-        now->left = new BiTree<T>{x, nullptr, nullptr, nullptr};
+        now->right = new BiTree< T >{x, nullptr, nullptr, now};
         return;
       }
-      else
-      {
-        now = now->left;
-      }
+      now = now->right;
     }
   }
 }
@@ -182,7 +186,7 @@ void clear(BiTree< T >* root)
 }
 
 template< class T, class Cmp = std::less< T > >
-BiTree< T, Cmp >* input_tree(std::istream& in, size_t size, Cmp cmp = Cmp())
+BiTree< T >* input_tree(std::istream& in, size_t size, Cmp cmp = Cmp())
 {
   T x = 0;
   if (size == 0)
@@ -194,10 +198,11 @@ BiTree< T, Cmp >* input_tree(std::istream& in, size_t size, Cmp cmp = Cmp())
   {
     throw std::logic_error("Error in input\n");
   }
+  BiTree< T >* root = nullptr;
   try
   {
-    BiTree< T >* root = new BiTree< T >{x, nullptr, nullptr, nullptr};
-    for (size_t i = 0; i < size; i++)
+    root = new BiTree< T >{x, nullptr, nullptr, nullptr};
+    for (size_t i = 1; i < size; i++)
     {
       in >> x;
       if (!in)
@@ -233,21 +238,30 @@ int main()
   {
     std::cerr << e.what() << '\n';
   }
-  std::string way = 0;
+  std::string way = "meow";
   std::cin >> way;
   if (way == "tomax")
   {
-    for (auto it = begin(root); it.hasNext(); it = it.next())
+    auto it = begin(root);
+    for (; it.hasNext(); it = it.next())
     {
-      std::cout << it.data();
+      std::cout << it.data() << " ";
     }
+    std::cout << it.data();
   }
   else if (way == "tomin")
   {
-    for (auto it = rbegin(root); it.hasPrev(); it = it.prev())
+    auto it = rbegin(root);
+    for (; it.hasPrev(); it = it.prev())
     {
-      std::cout << it.data();
+      std::cout << it.data() << " ";
     }
+    std::cout << it.data();
   }
-
+  else
+  {
+    std::cerr << "Incorrect input\n";
+    return 1;
+  }
+  std::cout << "\n";
 }
