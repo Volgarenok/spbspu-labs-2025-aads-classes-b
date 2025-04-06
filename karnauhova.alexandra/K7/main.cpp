@@ -259,21 +259,27 @@ int main()
   std::cin >> way;
   if (way == "tomax")
   {
-    auto it = begin(root);
-    for (; it.hasNext(); it = it.next())
+    if (size >= 0)
     {
-      std::cout << it.data() << " ";
+      auto it = begin(root);
+      for (; it.hasNext(); it = it.next())
+      {
+        std::cout << it.data() << " ";
+      }
+      std::cout << it.data();
     }
-    std::cout << it.data();
   }
   else if (way == "tomin")
   {
-    auto it = rbegin(root);
-    for (; it.hasPrev(); it = it.prev())
+    if (size >= 0)
     {
-      std::cout << it.data() << " ";
+      auto it = rbegin(root);
+      for (; it.hasPrev(); it = it.prev())
+      {
+        std::cout << it.data() << " ";
+      }
+      std::cout << it.data();
     }
-    std::cout << it.data();
   }
   else
   {
