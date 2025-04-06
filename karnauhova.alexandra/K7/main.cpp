@@ -125,6 +125,10 @@ const T& BiTreeIterator< T >::data() const
 template< class T >
 BiTreeIterator< T > begin(BiTree< T > * root)
 {
+  if (root == nullptr)
+  {
+    return BiTreeIterator< T >{nullptr};
+  }
   BiTree< T >* min = root;
   while (min->left)
   {
@@ -137,6 +141,10 @@ BiTreeIterator< T > begin(BiTree< T > * root)
 template< class T >
 BiTreeIterator< T > rbegin(BiTree< T > * root)
 {
+  if (root == nullptr)
+  {
+    return BiTreeIterator< T >{nullptr};
+  }
   BiTree< T >* max = root;
   while (max->right)
   {
@@ -236,6 +244,7 @@ int main()
   }
   catch(const std::exception& e)
   {
+    clear(root);
     std::cerr << e.what() << '\n';
   }
   std::string way = "meow";
@@ -260,8 +269,10 @@ int main()
   }
   else
   {
+    clear(root);
     std::cerr << "Incorrect input\n";
     return 1;
   }
   std::cout << "\n";
+  clear(root);
 }
