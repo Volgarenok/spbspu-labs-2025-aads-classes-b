@@ -25,7 +25,6 @@ struct BiTree {
 
 template< class T, class Cmp >
 struct BiTreeIterator {
-  
   BiTree< T, Cmp > *node_;
 
   BiTreeIterator(BiTree< T, Cmp > *node);
@@ -167,7 +166,7 @@ BiTree< T, Cmp > * find(const T &value, BiTree< T, Cmp > *root)
 template< class T, class Cmp >
 void push(const T &value, BiTree< T, Cmp > *root)
 {
-  BiTree< T, Cmp > *cur = new BiTree< T, Cmp >{value, root->cmp}, *pos = nullptr;
+  BiTree< T, Cmp > *cur = new BiTree< T, Cmp >{ value, root->cmp }, *pos = nullptr;
   cur->data = value;
   pos = find(value, root);
   cur->parent = pos;
@@ -188,7 +187,7 @@ BiTree< T, Cmp > * create(const T &value, Cmp cmp)
   BiTree< T, Cmp > *root = nullptr, *fake = nullptr;
   try
   {
-    fake = new BiTree< T, Cmp >(value, cmp);
+    fake = new BiTree< T, Cmp >{ value, cmp };
     root = new BiTree< T, Cmp >{ value, cmp, fake };
     return root;
   }
@@ -298,7 +297,7 @@ int main()
     }
     full_clear(root);
   }
-  catch(const std::exception& e)
+  catch(const std::exception &e)
   {
     full_clear(root);
     std::cerr << e.what() << '\n';
