@@ -164,9 +164,15 @@ BiTree< T, Cmp > * find(const T &value, BiTree< T, Cmp > *root)
 }
 
 template< class T, class Cmp >
-void push(const T &value, BiTree< T, Cmp > *root)
+BiTree< T, Cmp > * push(const T &value, BiTree< T, Cmp > *root)
 {
   BiTree< T, Cmp > *cur = new BiTree< T, Cmp >{ value, root->cmp }, *pos = nullptr;
+  if (!root->parent)
+  {
+    root->data = value;
+    cur->parent = root;
+    return cur;
+  }
   cur->data = value;
   pos = find(value, root);
   cur->parent = pos;
@@ -178,18 +184,17 @@ void push(const T &value, BiTree< T, Cmp > *root)
   {
     pos->right = cur;
   }
-  return;
+  return root;
 }
 
 template< class T, class Cmp >
 BiTree< T, Cmp > * create(const T &value, Cmp cmp)
 {
-  BiTree< T, Cmp > *root = nullptr, *fake = nullptr;
+  BiTree< T, Cmp > *fake = nullptr;
   try
   {
     fake = new BiTree< T, Cmp >{ value, cmp };
-    root = new BiTree< T, Cmp >{ value, cmp, fake };
-    return root;
+    return fake;
   }
   catch (const std::exception &e)
   {
@@ -263,12 +268,8 @@ int main()
     {
       std::cin >> k;
     }
-    else
-    {
-      std::cout << '\n';
-      return 0;
-    }
     root = create(k, comp{});
+    root = push(k, root);
     for (size_t i = 1; i < n; i++)
     {
       if (!(std::cin >> k))
