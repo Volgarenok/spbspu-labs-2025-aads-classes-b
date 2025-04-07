@@ -241,11 +241,11 @@ template< class T, class Cmp >
 std::ostream & out_tomin(BiTree< T, Cmp > *root, std::ostream &out)
 {
   auto it = rbegin(root);
-  std::cout << '\n' << it.data();
+  out<< it.data();
   it = it.prev();
   for (; it.hasPrev(); it = it.prev())
   {
-    std::cout << ' ' << it.data();
+    out << ' ' << it.data();
   }
   return out;
 }
@@ -274,7 +274,7 @@ int main()
       if (!(std::cin >> k))
       {
         full_clear(root);
-        std::cout << "bad input\n";
+        std::cerr << "bad input\n";
         return 2;
       }
       push(k, root);
@@ -292,7 +292,7 @@ int main()
     else
     {
       full_clear(root);
-      std::cout << "no good command\n";
+      std::cerr << "no good command\n";
       return 2;
     }
     full_clear(root);
