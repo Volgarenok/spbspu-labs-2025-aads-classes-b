@@ -190,17 +190,8 @@ BiTree< T, Cmp > * push(const T &value, BiTree< T, Cmp > *root)
 template< class T, class Cmp >
 BiTree< T, Cmp > * create(const T &value, Cmp cmp)
 {
-  BiTree< T, Cmp > *fake = nullptr;
-  try
-  {
-    fake = new BiTree< T, Cmp >{ value, cmp };
-    return fake;
-  }
-  catch (const std::exception &e)
-  {
-    delete fake;
-    throw;
-  }
+  BiTree< T, Cmp > *fake = new BiTree< T, Cmp >{ value, cmp };
+  return fake;
 }
 
 template< class T, class Cmp >
@@ -230,8 +221,18 @@ BiTreeIterator< T, Cmp > rbegin(BiTree< T, Cmp > *root)
 }
 
 template< class T, class Cmp >
+bool empty(BiTree< T, Cmp > *root)
+{
+  return (!root->parent);
+}
+
+template< class T, class Cmp >
 std::ostream & out_tomax(BiTree< T, Cmp > *root, std::ostream &out)
 {
+  if (empty(root))
+  {
+    return out;
+  }
   auto it = begin(root);
   out << it.data();
   it = it.next();
@@ -245,8 +246,12 @@ std::ostream & out_tomax(BiTree< T, Cmp > *root, std::ostream &out)
 template< class T, class Cmp >
 std::ostream & out_tomin(BiTree< T, Cmp > *root, std::ostream &out)
 {
+  if (empty(root))
+  {
+    return out;
+  }
   auto it = rbegin(root);
-  out<< it.data();
+  out << it.data();
   it = it.prev();
   for (; it.hasPrev(); it = it.prev())
   {
@@ -264,12 +269,12 @@ int main()
     size_t n = 0;
     std::cin >> n;
     int k = 0;
+    root = create(k, comp{});
     if (n)
     {
       std::cin >> k;
+      root = push(k, root);
     }
-    root = create(k, comp{});
-    root = push(k, root);
     for (size_t i = 1; i < n; i++)
     {
       if (!(std::cin >> k))
