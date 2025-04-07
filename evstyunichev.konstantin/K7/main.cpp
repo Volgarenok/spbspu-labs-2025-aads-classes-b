@@ -252,8 +252,8 @@ std::ostream & out_tomin(BiTree< T, Cmp > *root, std::ostream &out)
 
 int main()
 {
-  using compT = bool (*)(int, int);
-  BiTree< int, std::less< int > > *root = nullptr;
+  using comp = std::less< int >;
+  BiTree< int, comp > *root = nullptr;
   try
   {
     size_t n = 0;
@@ -268,7 +268,7 @@ int main()
       std::cout << '\n';
       return 0;
     }
-    root = create(k, std::less< int >{});
+    root = create(k, comp{});
     for (size_t i = 1; i < n; i++)
     {
       if (!(std::cin >> k))
