@@ -79,7 +79,7 @@ List<T>* read_list()
   List<T>* head = nullptr;
   List<T>** current = &head;
   T value;
-    
+
   while (std::cin >> value)
   {
     try
@@ -93,13 +93,13 @@ List<T>* read_list()
       throw;
     }
   }
-    
+
   if (!std::cin.eof() && std::cin.fail())
   {
     clear(head);
     throw std::runtime_error("Invalid input");
   }
-    
+
   return head;
 }
 
@@ -120,7 +120,6 @@ int main(int argc, char** argv)
   try
   {
     List<int>* list = read_list<int>();
-      
     if (mode == "0")
     {
       list = reverse_with_list(list);
@@ -139,7 +138,6 @@ int main(int argc, char** argv)
     }
 
     output_list(std::cout, list);
-      
     clear(list);    
   }
   catch (const std::exception& e)
