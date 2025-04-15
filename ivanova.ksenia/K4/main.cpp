@@ -65,9 +65,16 @@ List<T>* reverse_recursively(List<T>* head) noexcept
 template <class T>
 void output_list(std::ostream& out, List<T>* head)
 {
+  if (!head)
+  {
+    out << "\n";
+    return;
+  }
+  out << head->data;
+  head = head->next;
   while (head)
   {
-    out << head->data << " ";
+    out << " " << head->data;
     head = head->next;
   }
   out << "\n";
