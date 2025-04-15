@@ -109,34 +109,37 @@ List<T>* read_list()
 
 int main(int argc, char** argv)
 {
-  if (argc != 2)
+  int reverse_method = 1;
+  if (argc == 2)
   {
-    std::cerr << "Usage: " << (argv[0] ? argv[0] : "./lab") << " <0|1|2>\n";
-    return 0;
+    try
+    {
+      reverse_method = std::stoi(argv[1]);
+      if (reverse_method < 0 || reverse_method > 2)
+      {
+        std::cerr << "Warning: Invalid mode. Using default reverse method (1).\n";
+        reverse_method = 1;
+      }
+    }
+    catch (...)
+    {
+      std::cerr << "Warning: Invalid mode. Using default reverse method (1).\n";
+      reverse_method = 1;
+    }
   }
-  std::string mode(argv[1]);
-  if (mode != "0" && mode != "1" && mode != "2")
+  else if (argc > 2)
   {
-    std::cerr << "Warning: Invalid mode. Using default reverse method.\n";
+    std::cerr << "Usage: " << (argv[0] ? argv[0] : "./lab") << " [0|1|2]\n";
+    std::cerr << "Warning: Using default reverse method (1).\n";
   }
   try
   {
     List<int>* list = read_list<int>();
-    if (mode == "0")
+    switch (reverse_method)
     {
-      list = reverse_with_list(list);
-    }
-    else if (mode == "1")
-    {
-      list = reverse_cleanly(list);
-    }
-    else if (mode == "2")
-    {
-      list = reverse_recursively(list);
-    }
-    else
-    {
-      list = reverse_cleanly(list);
+      case 0: list = reverse_with_list(list); break;
+      case 1: list = reverse_cleanly(list); break;
+      case 2: list = reverse_recursively(list); break;
     }
     output_list(std::cout, list);
     clear(list);
