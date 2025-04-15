@@ -9,9 +9,11 @@ struct BiTree
   BiTree<T>* right;
 };
 
-bool compare(int a, int b)
+
+template<class T>
+bool default_compare(const T& a, const T& b)
 {
-    return a < b;
+  return a < b;
 }
 
 template<class T, class Cmp>
@@ -23,16 +25,13 @@ const BiTree<T>* find(const BiTree<T>* root, const T& value, Cmp cmp)
   }
   if (cmp(value, root->data))
   {
-    root = root->left;
+    return find(root->left, value, cmp);
   }
   else if (cmp(root->data, value))
   {
-    root = root->right;
+    return find(root->right, value, cmp);
   }
-  else
-  {
-    return root;
-  }
+  return root;
 }
 
 template<class T, class Cmp>
@@ -45,11 +44,11 @@ void insert(BiTree<T>*& root, const T& value, Cmp cmp)
   }
   if (cmp(value, root->data))
   {
-    root = root->left;
+    insert(root->left, value, cmp);
   }
   else
   {
-    root = root->right;
+    insert(root->right, value, cmp);
   }
 }
 
@@ -72,27 +71,27 @@ int main()
   BiTree<int>* root = nullptr;
 
   int length;
-  if (!(std::cin >> length))
-  {
-    std::cerr << "Failed to read the length of the sequence." << '\n';
+  if (!(std::cin >> length) || length < 0) {
+    std::cerr << "Invalid sequence length." << '\n';
     return 1;
   }
+
   for (int i = 0; i < length; ++i)
   {
     int value;
     if (!(std::cin >> value))
     {
-      std::cerr << "Failed to read an element of the sequence." << '\n';
+      std::cerr << "Failed to read sequence element." << '\n';
       clear(root);
-      return 1;
+        return 1;
     }
-    insert(root, value, compare);
+     insert(root, value, cmp);
   }
 
   int searchValue;
   while (std::cin >> searchValue)
   {
-    const BiTree<int>* result = find(root, searchValue, compare);
+    const BiTree<int>* result = find(root, searchValue, cmp);
     if (result != nullptr)
     {
       std::cout << "<FOUND>" << '\n';
