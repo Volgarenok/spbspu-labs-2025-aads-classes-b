@@ -79,7 +79,6 @@ List<T>* read_list()
   List<T>* head = nullptr;
   List<T>** current = &head;
   T value;
-
   while (std::cin >> value)
   {
     try
@@ -93,13 +92,11 @@ List<T>* read_list()
       throw;
     }
   }
-
   if (!std::cin.eof() && std::cin.fail())
   {
     clear(head);
     throw std::runtime_error("Invalid input");
   }
-
   return head;
 }
 
@@ -110,13 +107,11 @@ int main(int argc, char** argv)
     std::cerr << "Usage: " << (argv[0] ? argv[0] : "./lab") << " <0|1|2>\n";
     return 0;
   }
-
   std::string mode(argv[1]);
   if (mode != "0" && mode != "1" && mode != "2")
   {
     std::cerr << "Warning: Invalid mode. Using default reverse method.\n";
   }
-
   try
   {
     List<int>* list = read_list<int>();
@@ -136,9 +131,8 @@ int main(int argc, char** argv)
     {
       list = reverse_cleanly(list);
     }
-
     output_list(std::cout, list);
-    clear(list);    
+    clear(list);
   }
   catch (const std::exception& e)
   {
