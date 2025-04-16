@@ -186,6 +186,71 @@ struct TriTreeIterator
   }
 };
 
+template< class T, class Cmp >
+TriIterator< T, Cmp > begin(TriTree< T, Cmp >* root)
+{
+  if (root == nullptr)
+  {
+    return TriTreeIterator< T, Cmp >(nullptr);
+  }
+  TriTree< T, Cmp >* node = root;
+  while (node->left != nullptr)
+  {
+    node = node->left;
+  }
+  return TriTreeIterator< T, Cmp >(node);
+}
+
+template< class T, class Cmp >
+TriTreeIterator< T, Cmp > rbegin(TriTree< T, Cmp >* root)
+{
+  if (root == nullptr)
+  {
+    return TriTreeIterator< T, Cmp >(nullptr);
+  }
+
+  TriTree< T, Cmp >* node = root;
+  while (node->right != nullptr)
+  {
+    node = node->right;
+  }
+  return TriTreeIterator< T, Cmp >(node, true);
+}
+
+template< class T, class Cmp >
+bool canBeInserted(TriTree< T, Cmp >* node, const std::pair< T, T >& pair, Cmp cmp = Cmp())
+{
+  if (node == nullptr)
+  {
+    return true;
+  }
+
+  if (cmp(pair.first, node->data.first) && cmp(pair.second, node->data.first))
+  {
+    return canBeInserted(node->left, pair, cmp);
+  }
+  else if (cmp(node->data.second, pair.first) && cmp(node->data.second, pair.second))
+  {
+    return canBeInserted(node->right, pair, cmp);
+  }
+  else if (!cmp(pair.first, node->data.first) && !cmp(node->data.second, pair.second))
+  {
+    return canBeInserted(node->middle, pair, cmp);
+  }
+  return false;
+}
+
+template< class T, class Cmp >
+bool insertPair(TriTree< T, Cmp >** node, const sts::pair< T, T >& pair, TriTree< T, Cmp >* parent = nullptr,
+  Cmp cmp = Cmp())
+{
+  if (*node == nullptr)
+  {
+    *node = new TriTree< T, Cmp >{pair, nullptr, nullptr, nullptr, parent};
+    return true;
+  }
+}
+
 int main()
 {}
 
