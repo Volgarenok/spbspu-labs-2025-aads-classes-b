@@ -249,6 +249,32 @@ bool insertPair(TriTree< T, Cmp >** node, const sts::pair< T, T >& pair, TriTree
     *node = new TriTree< T, Cmp >{pair, nullptr, nullptr, nullptr, parent};
     return true;
   }
+
+  if (cmp(pair.first, (*node)->data.first) && cmp(pair.second, (*node)->data.first))
+  {
+    return insertPair(&(*node)->left, pair, *node, cmp);
+  }
+  else if (cmp((*node)->data.second, pair.first) && cmp((*node)->data.second, pair.second))
+  {
+    return insertPair(&(*node)->right, pair, *node, cmp);
+  }
+  else if (!cmp(pair.first, (*node)->data.first) && !cmp((*node)->data.second, pair.second))
+  {
+    return insertPair(&(*node)->middle, pair, *node, cmp);
+  }
+  return false;
+}
+
+template< class T, class Cmp >
+void clear(TriTree< T, Cmp >* node)
+{
+  if (node != nullptr)
+  {
+    clear(node->left);
+    clear(node->middle);
+    clear(node->right);
+    delete node;
+  }
 }
 
 int main()
