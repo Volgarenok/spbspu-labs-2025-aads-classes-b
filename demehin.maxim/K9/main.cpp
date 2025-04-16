@@ -277,6 +277,126 @@ void clear(TriTree< T, Cmp >* node)
   }
 }
 
+template< class T, class Cmp >
+size_t countIntersects(TriTree< T, Cmp >* root, const T& v1, const T& v2, Cmp cmp = Cmp())
+{
+  size_t cnt = 0;
+  if (cmp(v2, v1))
+  {
+    for (auto it = rbegin(root); it.hasPrev(); it = it.prev())
+    {
+      const auto& pair = it.data();
+      if (!(cmp(pair.second, v2) || cmp(v1, pair.first)))
+      {
+        cnt++;
+      }
+    }
+  }
+  else
+  {
+    for (auto it = begin(root); it.hasNext(); it = it.next())
+    {
+      const auto& pair = it.data();
+      if (!(cmp(p.second, v1) || cmp(v2, p.first)))
+      {
+        cnt++;
+      }
+    }
+  }
+
+  return cnt;
+}
+
+template< class T, class Cmp >
+size_t countCovers(TriTree< T, Cmp >* root, const T& v1, const T& v2, Cmp cmp = Cmp())
+{
+  size_t cnt = 0;
+  if (cmp(v2, v1))
+  {
+    for (auto it = rbegin(root); it.hasPrev(); it = it.prev())
+    {
+      const auto& pair = it.data();
+      if (!cmp(v2, pair.first) && !cmp(pair.second, v1))
+      {
+        cnt++;
+      }
+    }
+  }
+  else
+  {
+    for (auto it = begin(root); it.hasNext(); it = it.next())
+    {
+      const auto& pair = it.data();
+      if (!cmp(v1, pair.first) && !cmp(pair.second, v2))
+      {
+        cnt++;
+      }
+    }
+  }
+  return cnt;
+}
+
+template< class T, class Cmp >
+size_t countAvoids(TriTree< T, Cmp >* root, const T& v1, const T& v2, Cmp cmp = Cmp())
+{
+  size_t cnt = 0;
+  if (cmp(v2, v1))
+  {
+    for (auto it = rbegin(root); it.hasPrev(); it = it.prev())
+    {
+      const auto& pair = it.data();
+      if (cmp(pair.second, v2) || cmp(v1, pair.first))
+      {
+        cnt++;
+      }
+    }
+  }
+  else
+  {
+    for (auto it = begin(root); it.hasNext(); it = it.next())
+    {
+      const auto& pair = it.data();
+      if (cmp(pair.second, v1) || cmp(v2, pair.first))
+      {
+        cnt++;
+      }
+    }
+  }
+  return cnt;
+}
+
+template< class T, class Cmp >
+size_t countCovers(TriTree< T, Cmp >* root, T v1, T v2, Cmp cmp = Cmp())
+{
+  if (cmp(v2, v1))
+  {
+    std::swap(v1, v2);
+  }
+
+  size_t cnt = 0;
+  for (auto it = begin(root); it.hasNext(); it = it.next())
+  {
+    const auto& pair = it.data();
+    if (!cmp(v1, p.first) && !cmp(p.second, v2))
+    {
+      cnt++;
+    }
+  }
+  return cnt;
+}
+
+template< class T, class Cmp >
+size_t countAvoids(TriTree< T, Cmp >* root, T v1, T v2, Cmp cmp = Cmp())
+{
+  if (cmp(v2, v1))
+  {
+    std::swap(v1, v2);
+  }
+
+  size_t cnt = 0;
+  for (auto it = begin(root); it.hasNext
+}
+
 int main()
 {}
 
