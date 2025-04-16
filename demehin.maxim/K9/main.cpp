@@ -1,3 +1,5 @@
+#include <iostream>
+
 template< class T, class Cmp >
 struct TriTree
 {
@@ -11,18 +13,12 @@ struct TriTreeIterator
   using this_t = TriTreeIterator< T, Cmp >;
 
   TriTree< T, Cmp >* current;
-  TriTree< T, Cmp >* nextNode;
   bool isReversed;
 
   explicit TriTreeIterator(TriTree< T, Cmp >* root, bool rev = false):
     current(root),
     isReversed(rev)
-  {
-    if (current != nullptr)
-    {
-      findNext();
-    }
-  }
+  {}
 
   bool hasNext() const
   {
@@ -156,7 +152,7 @@ struct TriTreeIterator
       }
       if (current->left != nullptr)
       {
-        return this_t(current->left, is Reversed);
+        return this_t(current->left, isReversed);
       }
 
       TriTree< T, Cmp >* node = current;
@@ -187,7 +183,7 @@ struct TriTreeIterator
 };
 
 template< class T, class Cmp >
-TriIterator< T, Cmp > begin(TriTree< T, Cmp >* root)
+TriTreeIterator< T, Cmp > begin(TriTree< T, Cmp >* root)
 {
   if (root == nullptr)
   {
@@ -241,8 +237,7 @@ bool canBeInserted(TriTree< T, Cmp >* node, const std::pair< T, T >& pair, Cmp c
 }
 
 template< class T, class Cmp >
-bool insertPair(TriTree< T, Cmp >** node, const sts::pair< T, T >& pair, TriTree< T, Cmp >* parent = nullptr,
-  Cmp cmp = Cmp())
+bool insertPair(TriTree< T, Cmp >** node, const std::pair< T, T >& pair, TriTree< T, Cmp >* parent = nullptr, Cmp cmp = Cmp())
 {
   if (*node == nullptr)
   {
@@ -297,7 +292,7 @@ size_t countIntersects(TriTree< T, Cmp >* root, const T& v1, const T& v2, Cmp cm
     for (auto it = begin(root); it.hasNext(); it = it.next())
     {
       const auto& pair = it.data();
-      if (!(cmp(p.second, v1) || cmp(v2, p.first)))
+      if (!(cmp(pair.second, v1) || cmp(v2, pair.first)))
       {
         cnt++;
       }
@@ -365,38 +360,77 @@ size_t countAvoids(TriTree< T, Cmp >* root, const T& v1, const T& v2, Cmp cmp = 
   return cnt;
 }
 
-template< class T, class Cmp >
-size_t countCovers(TriTree< T, Cmp >* root, T v1, T v2, Cmp cmp = Cmp())
+int main()
 {
-  if (cmp(v2, v1))
+  TriTree< int, std::less< int > >* root = nullptr;
+  size_t pairCount;
+
+  if (!(std::cin >> pairCount))
   {
-    std::swap(v1, v2);
+    std::cerr << "wrong parameter\n";
+    return 1;
   }
 
-  size_t cnt = 0;
-  for (auto it = begin(root); it.hasNext(); it = it.next())
+  std::less< int > cmp;
+  for (size_t i = 0; i < pairCount; i++)
   {
-    const auto& pair = it.data();
-    if (!cmp(v1, p.first) && !cmp(p.second, v2))
+    int a, b;
+    if (!(std::cin >> a >> b))
     {
-      cnt++;
+      std::cerr << "wrong parameters\n";
+      clear(root);
+      return 1;
+    }
+    if (a == b)
+    {
+      continue;
+    }
+
+    std::pair< int, int > pair = cmp(a, b) ? std::make_pair(a, b) : std::make_pair(b, a);
+    if (root == nullptr)
+    {
+      root = new TriTree< int, std::less< int > >{ pair, nullptr, nullptr, nullptr, nullptr };
+      continue;
+    }
+    if (canBeInserted(root, pair, cmp))
+    {
+      insertPair(&root, pair);
     }
   }
-  return cnt;
-}
 
-template< class T, class Cmp >
-size_t countAvoids(TriTree< T, Cmp >* root, T v1, T v2, Cmp cmp = Cmp())
-{
-  if (cmp(v2, v1))
+  std::string command;
+  while (std::cin >> command)
   {
-    std::swap(v1, v2);
+    if (command == "intersects" || command == "covers" || command == "avoids")
+    {
+      int v1;
+      int v2;
+      if (!(std::cin >> v1 >> v2))
+      {
+        std::cerr << "<INVALID COMMAND>\n";
+        continue;
+      }
+      if (command == "intersects")
+      {
+        std::cout << countIntersects(root, v1, v2, cmp) << "\n";
+      }
+      else if (command == "covers")
+      {
+        std::cout << countCovers(root, v1, v2, cmp) << "\n";
+      }
+      else if (command == "avoids")
+      {
+        std::cout << countAvoids(root, v1, v2, cmp) << "\n";
+      }
+    }
+    else
+    {
+      std::cerr << "unknown command\n";
+      clear(root);
+      return 1;
+    }
   }
 
-  size_t cnt = 0;
-  for (auto it = begin(root); it.hasNext
+  clear(root);
 }
-
-int main()
-{}
 
