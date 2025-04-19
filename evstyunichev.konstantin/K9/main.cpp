@@ -300,7 +300,7 @@ int main()
     size_t n = 0;
     std::cin >> n;
     std::pair< int, int > data{ 0, 0 };
-    TriTree< int, std::less< int > > *root = create(data, std::less< int >{});
+    TriTree< int, comp > *root = create(data, comp{});
     if (n)
     {
       std::cin >> data.first >> data.second;
