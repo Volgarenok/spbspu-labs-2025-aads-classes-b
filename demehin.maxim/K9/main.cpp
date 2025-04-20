@@ -233,7 +233,7 @@ int main()
       int v1, v2;
       if (!(std::cin >> v1 >> v2))
       {
-        std::cerr << "<INVALID COMMAND>\n";
+        std::cout << "<INVALID COMMAND>\n";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
         continue;
@@ -241,7 +241,7 @@ int main()
 
       if (v1 == v2 || cmp(v2, v1))
       {
-        std::cerr << "<INVALID COMMAND>\n";
+        std::cout << "<INVALID COMMAND>\n";
         continue;
       }
 
