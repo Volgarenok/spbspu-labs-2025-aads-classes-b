@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <ios>
 #include <iostream>
 #include <string>
 
@@ -17,6 +18,7 @@ struct TriTree {
   {
   }
 };
+
 template< class T, class Cmp >
 struct TriTreeIterator {
   TriTree< T, Cmp > *node_;
@@ -151,23 +153,23 @@ const std::pair< T, T > & TriTreeIterator< T, Cmp >::data() const
 }
 
 template< class T, class Cmp >
-void clear(TriTree< T, Cmp > *root)
+void subclear(TriTree< T, Cmp > *root)
 {
   if (!root)
   {
     return;
   }
-  clear(root->left);
-  clear(root->right);
-  clear(root->middle);
+  subclear(root->left);
+  subclear(root->right);
+  subclear(root->middle);
   delete root;
 }
 
 template< class T, class Cmp >
-void full_clear(TriTree< T, Cmp > *root)
+void clear(TriTree< T, Cmp > *root)
 {
   delete root->parent;
-  clear(root);
+  subclear(root);
 }
 
 template< class T, class Cmp >
@@ -267,7 +269,7 @@ int status_for(const std::pair< T, T > &a, const std::pair< T, T > &b, Cmp cmp)
   {
     return 1;
   }
-  if (!cmp(b.first, a.first) && !cmp(a.second, b.second))
+  if (cmp(a.first, b.first) && cmp(b.second, a.second))
   {
     return 6;
   }
@@ -325,10 +327,10 @@ int main()
       std::cin >> data.first >> data.second;
       push(data, root);
     }
-    std::string command;
+    std::string command = "", i1 = "", i2 = "";
     int a = 0, b = 0;
     std::pair< int, int > segment{};
-    while (!(std::cin >> command >> a >> b).eof())
+    while (!(std::cin >> command >> i1 >> i2).eof())
     {
       int status = identify(command);
       if (!status)
@@ -337,9 +339,23 @@ int main()
         clear(root);
         return 1;
       }
-      if (std::cin.fail() || root->cmp(b, a))
+      bool flag = 0;
+      try
       {
-        std::cout << "<INVALID COMMAND>\n";
+        a = std::stoi(i1);
+        b = std::stoi(i2);
+        if (root->cmp(b, a))
+        {
+          flag = 1;
+        }
+      }
+      catch(const std::exception &e)
+      {
+        flag = 1;
+      }
+      if (flag)
+      {
+        std::cout << "<INVALID ARGUMENT>\n";
       }
       else
       {
