@@ -355,7 +355,7 @@ int main()
       }
       if (flag)
       {
-        std::cout << "<INVALID ARGUMENT>\n";
+        std::cout << "<INVALID COMMAND>\n";
       }
       else
       {
