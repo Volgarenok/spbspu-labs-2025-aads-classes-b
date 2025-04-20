@@ -269,7 +269,7 @@ int status_for(const std::pair< T, T > &a, const std::pair< T, T > &b, Cmp cmp)
   {
     return 1;
   }
-  if (cmp(a.first, b.first) && cmp(b.second, a.second))
+  if (!cmp(b.first, a.first) && !cmp(a.second, b.second))
   {
     return 6;
   }
