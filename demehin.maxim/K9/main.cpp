@@ -2,8 +2,9 @@
 #include <utility>
 #include <functional>
 #include <string>
+#include <limits>
 
-template < class T, class Cmp >
+template< class T, class Cmp >
 struct TriTree
 {
   std::pair< T, T > data;
@@ -13,7 +14,7 @@ struct TriTree
   TriTree< T, Cmp >* parent;
 };
 
-template < class T, class Cmp >
+template< class T, class Cmp >
 struct TriTreeIterator
 {
   using this_t = TriTreeIterator< T, Cmp >;
@@ -21,7 +22,7 @@ struct TriTreeIterator
   TriTree< T, Cmp >* current;
   bool isReversed;
 
-  explicit TriTreeIterator(TriTree< T, Cmp >* root, bool rev = false) :
+  explicit TriTreeIterator(TriTree< T, Cmp >* root, bool rev = false):
     current(root),
     isReversed(rev)
   {}
@@ -60,19 +61,19 @@ struct TriTreeIterator
   }
 };
 
-template < class T, class Cmp >
+template< class T, class Cmp >
 TriTreeIterator< T, Cmp > begin(TriTree< T, Cmp >* root)
 {
   return TriTreeIterator< T, Cmp >(root);
 }
 
-template < class T, class Cmp >
+template< class T, class Cmp >
 TriTreeIterator< T, Cmp > rbegin(TriTree< T, Cmp >* root)
 {
   return TriTreeIterator< T, Cmp >(root, true);
 }
 
-template < class T, class Cmp >
+template< class T, class Cmp >
 bool canBeInserted(TriTree< T, Cmp >* node, const std::pair< T, T >& pair, Cmp cmp = Cmp())
 {
   if (node == nullptr)
@@ -94,7 +95,7 @@ bool canBeInserted(TriTree< T, Cmp >* node, const std::pair< T, T >& pair, Cmp c
   return false;
 }
 
-template < class T, class Cmp >
+template< class T, class Cmp >
 bool insertPair(TriTree< T, Cmp >** node, const std::pair< T, T >& pair, TriTree< T, Cmp >* parent = nullptr)
 {
   if (*node == nullptr)
@@ -119,7 +120,7 @@ bool insertPair(TriTree< T, Cmp >** node, const std::pair< T, T >& pair, TriTree
   return false;
 }
 
-template < class T, class Cmp >
+template< class T, class Cmp >
 void clear(TriTree< T, Cmp >* node)
 {
   if (node != nullptr)
@@ -131,7 +132,7 @@ void clear(TriTree< T, Cmp >* node)
   }
 }
 
-template < class T, class Cmp >
+template< class T, class Cmp >
 size_t countIntersects(TriTree< T, Cmp >* root, const T& v1, const T& v2, Cmp cmp = Cmp())
 {
   size_t cnt = 0;
@@ -146,14 +147,14 @@ size_t countIntersects(TriTree< T, Cmp >* root, const T& v1, const T& v2, Cmp cm
   return cnt;
 }
 
-template < class T, class Cmp >
+template< class T, class Cmp >
 size_t countCovers(TriTree< T, Cmp >* root, const T& v1, const T& v2, Cmp cmp = Cmp())
 {
   size_t cnt = 0;
   for (auto it = begin(root); it.hasNext(); it = it.next())
   {
     const auto& pair = it.data();
-    if (!cmp(v1, pair.first) && !cmp(pair.second, v2))
+    if (!cmp(pair.first, v1) && !cmp(v2, pair.second))
     {
       cnt++;
     }
@@ -161,7 +162,7 @@ size_t countCovers(TriTree< T, Cmp >* root, const T& v1, const T& v2, Cmp cmp = 
   return cnt;
 }
 
-template < class T, class Cmp >
+template< class T, class Cmp >
 size_t countAvoids(TriTree< T, Cmp >* root, const T& v1, const T& v2, Cmp cmp = Cmp())
 {
   size_t cnt = 0;
@@ -207,9 +208,7 @@ int main()
 
     if (cmp(b, a))
     {
-      std::cerr << "<INVALID COMMAND>\n";
-      clear(root);
-      return 1;
+      std::swap(a, b);
     }
 
     std::pair< int, int > pair(a, b);
@@ -235,10 +234,12 @@ int main()
       if (!(std::cin >> v1 >> v2))
       {
         std::cerr << "<INVALID COMMAND>\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
         continue;
       }
 
-      if (cmp(v2, v1))
+      if (v1 == v2 || cmp(v2, v1))
       {
         std::cerr << "<INVALID COMMAND>\n";
         continue;
