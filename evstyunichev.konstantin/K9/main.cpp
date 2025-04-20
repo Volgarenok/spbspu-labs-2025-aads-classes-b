@@ -339,7 +339,7 @@ int main()
       }
       if (std::cin.fail() || root->cmp(b, a))
       {
-        std::cout << "INVALID COMMAND\n";
+        std::cout << "<INVALID COMMAND>\n";
       }
       else
       {
