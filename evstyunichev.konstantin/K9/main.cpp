@@ -17,18 +17,17 @@ struct TriTree {
   {
   }
 };
-/*
 template< class T, class Cmp >
 struct TriTreeIterator {
-  TriTree< T, Cmp > node_;
-  using this_t = TriTreeItretor< T, Cmp >;
+  TriTree< T, Cmp > *node_;
+  using this_t = TriTreeIterator< T, Cmp >;
   bool hasNext() const;
   bool hasPrev() const;
 
   this_t prev() const;
   this_t next() const;
 
-  std::pair< T, T > & data();
+  const std::pair< T, T > & data() const;
 };
 
 template< class T, class Cmp >
@@ -38,38 +37,65 @@ template< class T, class Cmp >
 TriTreeIterator< T, Cmp > rbegin(TriTree< T, Cmp > * root);
 
 template< class T, class Cmp >
+TriTree< T, Cmp > * min(TriTree< T, Cmp > *root)
+{
+  while (root->left)
+  {
+    root = root->left;
+  }
+  return root;
+}
+
+template< class T, class Cmp >
+TriTree< T, Cmp > * max(TriTree< T, Cmp > *root)
+{
+  while (root->middle || root->right)
+  {
+    root = (root->right ? root->right : root->middle);
+  }
+  return root;
+}
+
+template< class T, class Cmp >
 bool TriTreeIterator< T, Cmp >::hasPrev() const
 {
+  if (!node_->parent)
+  {
+    return 0;
+  }
   if (node_->left)
   {
     return 1;
   }
   TriTree< T, Cmp > *cur = node_;
-  while (cur->parent)
+  for (; cur->parent; cur = cur->parent)
   {
-    if (!cur->cmp(cur->data, cur->parent->data))
+    if (cur->parent->left != cur)
     {
       return 1;
     }
-    cur = cur->parent;
   }
   return 0;
 }
+
 template< class T, class Cmp >
 bool TriTreeIterator< T, Cmp >::hasNext() const
 {
-  if (node_->right)
+  if (!node_->parent)
+  {
+    return 0;
+  }
+  if (node_->right || node_->middle)
   {
     return 1;
   }
   TriTree< T, Cmp > *cur = node_;
-  while (cur->parent)
+  for (; cur->parent; cur = cur->parent)
   {
-    if (!cur->cmp(cur->parent->data, cur->data))
+    if (cur != (cur->parent->right ? cur->parent->right : cur->parent->middle))
     {
       return 1;
     }
-    cur = cur->parent;
   }
   return 0;
 }
@@ -78,20 +104,25 @@ template< class T, class Cmp >
 TriTreeIterator< T, Cmp > TriTreeIterator< T, Cmp >::next() const
 {
   TriTree< T, Cmp > *cur = node_;
-  if (cur->right)
+  cur = (cur->middle ? min(cur->middle) : cur);
+  cur = ((!node_->middle && cur->right) ? min(cur->right) : cur);
+  if (cur == node_)
   {
-    cur = cur->right;
-    while (cur->left)
+    for (; cur->parent; cur = cur->parent)
     {
-      cur = cur->left;
+      if (cur->parent->left == cur)
+      {
+        cur = cur->parent;
+        break;
+      }
+      if ((cur->parent->middle == cur) && cur->parent->right)
+      {
+        cur = min(cur->parent->right);
+        break;
+      }
     }
-    return TriTreeIterator< T, Cmp >(cur);
   }
-  while (cur->cmp(cur->parent->data, cur->data))
-  {
-    cur = cur->parent;
-  }
-  return TriTreeIterator< T, Cmp >(cur->parent);
+  return TriTreeIterator< T, Cmp >{ cur };
 }
 
 template< class T, class Cmp >
@@ -100,26 +131,25 @@ TriTreeIterator< T, Cmp > TriTreeIterator< T, Cmp >::prev() const
   TriTree< T, Cmp > *cur = node_;
   if (cur->left)
   {
-    cur = cur->left;
-    while (cur->right)
-    {
-      cur = cur->right;
-    }
-    return TriTreeIterator< T, Cmp >(cur);
+    return TriTreeIterator< T, Cmp >{ min(cur->left) };
   }
-  while (cur->cmp(cur->data, cur->parent->data))
+  for (; cur->parent; cur = cur->parent)
   {
-    cur = cur->parent;
+    if (cur->parent->left != cur)
+    {
+      cur = cur->parent;
+      break;
+    }
   }
-  return TriTreeIterator< T, Cmp >(cur->parent);
+  return TriTreeIterator< T, Cmp >{ cur };
 }
 
 template< class T, class Cmp >
-const T & TriTreeIterator< T, Cmp >::data() const
+const std::pair< T, T > & TriTreeIterator< T, Cmp >::data() const
 {
   return node_->data;
 }
-*/
+
 template< class T, class Cmp >
 void clear(TriTree< T, Cmp > *root)
 {
@@ -212,31 +242,16 @@ TriTree< T, Cmp > * create(const std::pair< T, T > &value, Cmp cmp)
   TriTree< T, Cmp > *fake = new TriTree< T, Cmp >{ value, cmp };
   return fake;
 }
-/*
-template< class T, class Cmp >
-TriTreeIterator< T, Cmp > begin(TriTree< T, Cmp > *root);
-
-template< class T, class Cmp >
-TriTreeIterator< T, Cmp > rbegin(TriTree< T, Cmp > *root);
-
 template< class T, class Cmp >
 TriTreeIterator< T, Cmp > begin(TriTree< T, Cmp > *root)
 {
-  while (root->left)
-  {
-    root = root->left;
-  }
-  return TriTreeIterator< T, Cmp >(root);
+  return TriTreeIterator< T, Cmp >{ min(root) };
 }
 
 template< class T, class Cmp >
 TriTreeIterator< T, Cmp > rbegin(TriTree< T, Cmp > *root)
 {
-  while (root->right)
-  {
-    root = root->right;
-  }
-  return TriTreeIterator< T, Cmp >(root);
+  return TriTreeIterator< T, Cmp >{ max(root) };
 }
 
 template< class T, class Cmp >
@@ -244,10 +259,9 @@ bool empty(TriTree< T, Cmp > *root)
 {
   return (!root->parent);
 }
-*/
 
 template< class T, class Cmp >
-int status_for(std::pair< T, T > &a, std::pair< T, T > &b, Cmp cmp)
+int status_for(const std::pair< T, T > &a, const std::pair< T, T > &b, Cmp cmp)
 {
   if (cmp(a.second, b.first) || cmp(b.second, a.first))
   {
@@ -319,7 +333,7 @@ int main()
       int status = identify(command);
       if (!status)
       {
-        std::cerr << "invalid command\n";
+        std::cerr << "bad cmd\n";
         clear(root);
         return 1;
       }
@@ -330,7 +344,12 @@ int main()
       else
       {
         segment = { a, b };
-        std::cout << dfs(root, segment, status) << '\n';
+        size_t ans = 0;
+        for (auto it = begin(root); it.hasNext(); it = it.next())
+        {
+          ans += bool(status_for(segment, it.data(), root->cmp) & status);
+        }
+        std::cout << ans << '\n';
       }
     }
     clear(root);
