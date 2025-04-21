@@ -23,7 +23,7 @@ struct BiTreeIterator
     }
     return node->left;
   }
-  
+
   bool hasNext() const
   {
     if(!node)
@@ -32,7 +32,7 @@ struct BiTreeIterator
     }
     return node->right;
   }
-  
+
   BiTreeIterator< T, Cmp > next() const
   {
     if (!node || !node->right)
@@ -41,7 +41,7 @@ struct BiTreeIterator
     }
     return BiTreeIterator<T, Cmp>{node->right};
   }
-  
+
   BiTreeIterator< T, Cmp > prev() const
   {
     if (!node || !node->left)
@@ -117,7 +117,6 @@ void clear(BiTree< T, Cmp > * root)
   clear(root->right);
   delete root;
 }
-
 
 int main()
 {
