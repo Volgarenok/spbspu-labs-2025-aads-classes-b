@@ -1,17 +1,17 @@
 #include <iostream>
 
-template< class T, class Cmp >
+template< class T, class Cmp = std::less<T> >
 struct BiTree
 {
   T data;
   Cmp cmp;
-  BiTree< T > * left, * right, * parent;
+  BiTree< T, Cmp > * left, * right, * parent;
 };
 
-template< class T >
+template< class T, class Cmp = std::less<T> >
 struct BiTreeIterator
 {
-  BiTree< T > * node;
+  BiTree< T, Cmp > * node;
 
   bool hasPrev() const
   {
@@ -21,6 +21,7 @@ struct BiTreeIterator
     }
     return node->left;
   }
+  
   bool hasNext() const
   {
     if(!node)
@@ -29,31 +30,30 @@ struct BiTreeIterator
     }
     return node->right;
   }
-  BiTreeIterator< T > next() const
+  
+  BiTreeIterator< T, Cmp > next() const
   {
     if (!node || !node->right)
     {
-      std::cerr << "No previous element" << '\n';
-      throw;
+      throw std::runtime_error("No next element");
     }
-    return BiTreeIterator<T, Cmp>(node->right);
+    return BiTreeIterator<T, Cmp>{node->right};
   }
-  BiTreeIterator< T > prev() const
+  
+  BiTreeIterator< T, Cmp > prev() const
   {
     if (!node || !node->left)
     {
-      std::cerr << "No previous element" << '\n';
-      throw;
+      throw std::runtime_error("No previous element");
     }
-    return BiTreeIterator<T, Cmp>(node->left);
+    return BiTreeIterator<T, Cmp>{node->left};
   }
 
   const T & data() const
   {
     if (!node)
     {
-      std::cerr << "Iterator is not dereferenceable" << '\n';
-      throw;
+      throw std::runtime_error("Iterator is not dereferenceable");
     }
     return node->data;
   }
