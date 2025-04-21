@@ -81,6 +81,41 @@ BiTreeIterator< T, Cmp > rbegin(BiTree< T, Cmp > * root)
   return BiTreeIterator<T, Cmp>{root};
 }
 
+template< class T, class Cmp = std::less<T> >
+void insert(BiTree< T, Cmp > ** root, const T & value)
+{
+  BiTree< T, Cmp > ** current = root;
+  BiTree< T, Cmp > * parent = nullptr;
+
+  while (*current)
+  {
+    parent = *current;
+    if ((*current)->cmp(value, (*current)->data))
+    {
+      current = &(*current)->left;
+    }
+    else if ((*current)->cmp((*current)->data, value))
+    {
+      current = &(*current)->right;
+    }
+    else
+    {
+      throw std::runtime_error("Duplicate values not allowed");
+    }
+  }
+
+  *current = new BiTree< T, Cmp >{value, Cmp{}, nullptr, nullptr, parent};
+}
+
+template< class T, class Cmp >
+void clear(BiTree< T, Cmp > * root)
+{
+  if (!root) return;
+  clear(root->left);
+  clear(root->right);
+  delete root;
+}
+
 int main()
 {
   int n;
