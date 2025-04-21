@@ -1,6 +1,7 @@
 #include <iostream>
 
-struct FwdList {
+struct FwdList
+{
   int value;
   FwdList* next;
 };
@@ -77,7 +78,7 @@ int main()
       return 0;
     }
   }
-  FwdList* current = head;
+  current = head;
   print(head);
   return 0;
 }
