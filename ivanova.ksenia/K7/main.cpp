@@ -59,6 +59,28 @@ struct BiTreeIterator
   }
 };
 
+template< class T, class Cmp >
+BiTreeIterator< T, Cmp > begin(BiTree< T, Cmp > * root)
+{
+  if (!root) return BiTreeIterator<T, Cmp>{nullptr};
+  while (root->left)
+  {
+    root = root->left;
+  }
+  return BiTreeIterator<T, Cmp>{root};
+}
+
+template< class T, class Cmp >
+BiTreeIterator< T, Cmp > rbegin(BiTree< T, Cmp > * root)
+{
+  if (!root) return BiTreeIterator<T, Cmp>{nullptr};
+  while (root->right)
+  {
+    root = root->right;
+  }
+  return BiTreeIterator<T, Cmp>{root};
+}
+
 int main()
 {
   int n;
