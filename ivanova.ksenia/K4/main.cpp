@@ -132,6 +132,7 @@ int main(int argc, char** argv)
     std::cerr << "Usage: " << (argv[0] ? argv[0] : "./lab") << " [0|1|2]\n";
     std::cerr << "Warning: Using default reverse method (1).\n";
   }
+
   try
   {
     List<int>* list = read_list<int>();
@@ -143,6 +144,7 @@ int main(int argc, char** argv)
     }
     output_list(std::cout, list);
     clear(list);
+    std::cerr << "Success: List reversed successfully.\n";
   }
   catch (const std::exception& e)
   {
