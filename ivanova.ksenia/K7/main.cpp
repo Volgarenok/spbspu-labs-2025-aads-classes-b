@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <stdexcept>
 
 template< class T, class Cmp = std::less<T> >
 struct BiTree
@@ -116,14 +118,68 @@ void clear(BiTree< T, Cmp > * root)
   delete root;
 }
 
+
 int main()
 {
-  int n;
-  std::cin >> n;
-  if (n < 0) {
-    std::cerr << "Invalid sequence length" << '\n';
+  try
+  {
+    int n;
+    if (!(std::cin >> n))
+    {
+      throw std::runtime_error("Failed to read sequence length");
+    }
+    if (n < 0)
+    {
+      throw std::runtime_error("Invalid sequence length");
+    }
+
+    BiTree<int> * root = nullptr;
+    for (int i = 0; i < n; ++i)
+    {
+      int value;
+      if (!(std::cin >> value))
+      {
+        clear(root);
+        throw std::runtime_error("Failed to read sequence element");
+      }
+      insert(&root, value);
+    }
+
+    std::string command;
+    if (!(std::cin >> command))
+    {
+      clear(root);
+      throw std::runtime_error("No command provided");
+    }
+
+    if (command == "tomax")
+    {
+      for (auto it = begin(root); it.node; it = it.next())
+      {
+        std::cout << it.data() << " ";
+      }
+      std::cout << "\n";
+    }
+    else if (command == "tomin")
+    {
+      for (auto it = rbegin(root); it.node; it = it.prev())
+      {
+        std::cout << it.data() << " ";
+      }
+      std::cout << '\n';
+    }
+    else
+    {
+      clear(root);
+      throw std::runtime_error("Invalid command");
+    }
+
+    clear(root);
+    return 0;
+  }
+  catch (const std::exception & e)
+  {
+    std::cerr << "Error: " << e.what() << '\n';
     return 1;
   }
-  //в твоём сообщении много букв
-  //значит мне уже пофиг
 }
