@@ -273,10 +273,6 @@ int status_for(const std::pair< T, T > &a, const std::pair< T, T > &b, Cmp cmp)
   {
     return 1;
   }
-  if (cmp(a.first, b.first) && cmp(b.second, a.second))
-  {
-    return 14;
-  }
   if (!cmp(b.first, a.first) && !cmp(a.second, b.second))
   {
     return 6;
@@ -340,19 +336,14 @@ int main()
     std::pair< int, int > segment{};
     while (!(std::cin >> command).eof())
     {
-      i1 = "arch";
-      i2 = "ITB";
+      i1 = "";
+      i2 = "";
       int status = identify(command);
       if (!status)
       {
         std::cerr << "bad cmd\n";
         clear(root);
         return 1;
-      }
-      /*clown*/
-      if (status == 4 && n == 9)
-      {
-        status *= 2;
       }
       bool flag = 0;
       if (!(std::cin >> i1 >> i2))
