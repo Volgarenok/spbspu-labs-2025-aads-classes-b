@@ -1,23 +1,22 @@
-#include <algorithm>
-#include <ios>
 #include <iostream>
 #include <string>
 
 template< class T, class Cmp >
 struct TriTree {
   std::pair< T, T > data;
-  Cmp cmp;
   TriTree< T, Cmp > *left, *middle, *right, *parent;
-  TriTree(const std::pair< T, T > &value, Cmp comp):
-    data(value),
-    cmp(comp),
-    left(nullptr),
-    middle(nullptr),
-    right(nullptr),
-    parent(nullptr)
-  {
-  }
+  TriTree(const std::pair< T, T > &value, Cmp comp);
 };
+
+template< class T, class Cmp >
+TriTree< T, Cmp >::TriTree(const std::pair< T, T > &value, Cmp comp):
+  data(value),
+  left(nullptr),
+  middle(nullptr),
+  right(nullptr),
+  parent(nullptr)
+{
+}
 
 template< class T, class Cmp >
 struct TriTreeIterator {
@@ -33,10 +32,10 @@ struct TriTreeIterator {
 };
 
 template< class T, class Cmp >
-TriTreeIterator< T, Cmp > begin(TriTree< T, Cmp > * root);
+TriTreeIterator< T, Cmp > begin(TriTree< T, Cmp > *root);
 
 template< class T, class Cmp >
-TriTreeIterator< T, Cmp > rbegin(TriTree< T, Cmp > * root);
+TriTreeIterator< T, Cmp > rbegin(TriTree< T, Cmp > *root);
 
 template< class T, class Cmp >
 TriTree< T, Cmp > * min(TriTree< T, Cmp > *root)
@@ -175,7 +174,7 @@ void clear(TriTree< T, Cmp > *root)
 template< class T, class Cmp >
 TriTree< T, Cmp > * find(const std::pair< T, T > &value, TriTree< T, Cmp > *root)
 {
-  if (root->cmp(root->data.second, value.first))
+  if (Cmp()(root->data.second, value.first))
   {
     if (!root->right)
     {
@@ -183,7 +182,7 @@ TriTree< T, Cmp > * find(const std::pair< T, T > &value, TriTree< T, Cmp > *root
     }
     return find(value, root->right);
   }
-  if (root->cmp(value.second, root->data.first))
+  if (Cmp()(value.second, root->data.first))
   {
     if (!root->left)
     {
@@ -191,7 +190,7 @@ TriTree< T, Cmp > * find(const std::pair< T, T > &value, TriTree< T, Cmp > *root
     }
     return find(value, root->left);
   }
-  else if (root->cmp(root->data.first, value.first) && root->cmp(value.second, root->data.second))
+  else if (Cmp()(root->data.first, value.first) && Cmp()(value.second, root->data.second))
   {
     if (!root->middle)
     {
@@ -205,11 +204,11 @@ TriTree< T, Cmp > * find(const std::pair< T, T > &value, TriTree< T, Cmp > *root
 template< class T, class Cmp >
 TriTree< T, Cmp > * push(std::pair< T, T > &value, TriTree< T, Cmp > *root)
 {
-  if (root->cmp(value.second, value.first))
+  if (Cmp()(value.second, value.first))
   {
     std::swap(value.first, value.second);
   }
-  TriTree< T, Cmp > *cur = new TriTree< T, Cmp >{ value, root->cmp }, *pos = nullptr;
+  TriTree< T, Cmp > *cur = new TriTree< T, Cmp >{ value, Cmp() }, *pos = nullptr;
   if (!root->parent)
   {
     root->data = value;
@@ -223,11 +222,11 @@ TriTree< T, Cmp > * push(std::pair< T, T > &value, TriTree< T, Cmp > *root)
     return pos;
   }
   cur->parent = pos;
-  if (root->cmp(cur->data.second, pos->data.first))
+  if (Cmp()(cur->data.second, pos->data.first))
   {
     pos->left = cur;
   }
-  else if (root->cmp(pos->data.second, cur->data.first))
+  else if (Cmp()(pos->data.second, cur->data.first))
   {
     pos->right = cur;
   }
@@ -287,7 +286,7 @@ size_t dfs(TriTree< T, Cmp > *root, std::pair< T, T > &a, int required)
   {
     return 0;
   }
-  size_t ans = bool(status_for(a, root->data, root->cmp) & required);
+  size_t ans = bool(status_for(a, root->data, Cmp()) & required);
   ans += dfs(root->left, a, required);
   ans += dfs(root->middle, a, required);
   ans += dfs(root->right, a, required);
@@ -359,12 +358,12 @@ int main()
       {
         a = std::stoi(i1);
         b = std::stoi(i2);
-        if (root->cmp(b, a))
+        if (comp()(b, a))
         {
           flag = 1;
         }
       }
-      catch(const std::exception &e)
+      catch (const std::exception &e)
       {
         flag = 1;
       }
@@ -378,7 +377,7 @@ int main()
         size_t ans = 0;
         for (auto it = begin(root); it.hasNext(); it = it.next())
         {
-          ans += bool(status_for(segment, it.data(), root->cmp) & status);
+          ans += bool(status_for(segment, it.data(), comp()) & status);
         }
         std::cout << ans << '\n';
       }
