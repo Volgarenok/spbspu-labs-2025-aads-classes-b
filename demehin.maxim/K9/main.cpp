@@ -22,73 +22,19 @@ struct TriTreeIterator
   TriTree< T, Cmp >* current;
   bool isReversed;
 
-  explicit TriTreeIterator(TriTree< T, Cmp >* root = nullptr, bool rev = false) :
+  explicit TriTreeIterator(TriTree< T, Cmp >* root, bool rev = false):
     current(root),
     isReversed(rev)
   {}
 
   bool hasNext() const
   {
-    if (current == nullptr)
-    {
-      return false;
-    }
-    if (isReversed == false)
-    {
-      if (current->right != nullptr)
-      {
-        return true;
-      }
-      if (current->middle != nullptr)
-      {
-        return true;
-      }
-      return false;
-    }
-    else
-    {
-      if (current->left != nullptr)
-      {
-        return true;
-      }
-      if (current->middle != nullptr)
-      {
-        return true;
-      }
-      return false;
-    }
+    return current != nullptr;
   }
 
   bool hasPrev() const
   {
-    if (current == nullptr)
-    {
-      return false;
-    }
-    if (isReversed == false)
-    {
-      if (current->left != nullptr)
-      {
-        return true;
-      }
-      if (current->middle != nullptr)
-      {
-        return true;
-      }
-      return false;
-    }
-    else
-    {
-      if (current->right != nullptr)
-      {
-        return true;
-      }
-      if (current->middle != nullptr)
-      {
-        return true;
-      }
-      return false;
-    }
+    return current != nullptr;
   }
 
   this_t next() const
@@ -97,29 +43,7 @@ struct TriTreeIterator
     {
       return *this;
     }
-    if (isReversed == false)
-    {
-      if (current->right != nullptr)
-      {
-        return this_t(current->right);
-      }
-      if (current->middle != nullptr)
-      {
-        return this_t(current->middle);
-      }
-    }
-    else
-    {
-      if (current->left != nullptr)
-      {
-        return this_t(current->left, true);
-      }
-      if (current->middle != nullptr)
-      {
-        return this_t(current->middle, true);
-      }
-    }
-    return *this;
+    return this_t(current->right, isReversed);
   }
 
   this_t prev() const
@@ -128,29 +52,7 @@ struct TriTreeIterator
     {
       return *this;
     }
-    if (isReversed == false)
-    {
-      if (current->left != nullptr)
-      {
-        return this_t(current->left);
-      }
-      if (current->middle != nullptr)
-      {
-        return this_t(current->middle);
-      }
-    }
-    else
-    {
-      if (current->right != nullptr)
-      {
-        return this_t(current->right, true);
-      }
-      if (current->middle != nullptr)
-      {
-        return this_t(current->middle, true);
-      }
-    }
-    return *this;
+    return this_t(current->left, isReversed);
   }
 
   std::pair< T, T >& data()
@@ -234,7 +136,7 @@ template< class T, class Cmp >
 size_t countIntersects(TriTree< T, Cmp >* root, const T& v1, const T& v2, Cmp cmp = Cmp())
 {
   size_t cnt = 0;
-  for (auto it = begin(root); it.current != nullptr; it = it.next())
+  for (auto it = begin(root); it.hasNext(); it = it.next())
   {
     const auto& pair = it.data();
     if (!(cmp(pair.second, v1) || cmp(v2, pair.first)))
@@ -249,7 +151,7 @@ template< class T, class Cmp >
 size_t countCovers(TriTree< T, Cmp >* root, const T& v1, const T& v2, Cmp cmp = Cmp())
 {
   size_t cnt = 0;
-  for (auto it = begin(root); it.current != nullptr; it = it.next())
+  for (auto it = begin(root); it.hasNext(); it = it.next())
   {
     const auto& pair = it.data();
     if (!cmp(pair.first, v1) && !cmp(v2, pair.second))
@@ -264,7 +166,7 @@ template< class T, class Cmp >
 size_t countAvoids(TriTree< T, Cmp >* root, const T& v1, const T& v2, Cmp cmp = Cmp())
 {
   size_t cnt = 0;
-  for (auto it = begin(root); it.current != nullptr; it = it.next())
+  for (auto it = begin(root); it.hasNext(); it = it.next())
   {
     const auto& pair = it.data();
     if (cmp(pair.second, v1) || cmp(v2, pair.first))
