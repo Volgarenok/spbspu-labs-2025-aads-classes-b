@@ -76,15 +76,24 @@ int main()
   }
   BiTree< int >* root = nullptr;
   IntComparator cmp;
-  for (int i = 0, x; i < n; i++)
+  try
   {
-    if (!(std::cin >> x))
+    for (int i = 0, x; i < n; i++)
     {
-      std::cerr << "error\n";
-      clear(root);
-      return 1;
+      if (!(std::cin >> x))
+      {
+        std::cerr << "error\n";
+        clear(root);
+        return 1;
+      }
+      root = insert(root, x, cmp);
     }
-    root = insert(root, x, cmp);
+  }
+  catch (...)
+  {
+    std::cerr << "error\n";
+    clear(root);
+    return 1;
   }
   int x;
   while (std::cin >> x)
